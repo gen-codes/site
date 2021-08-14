@@ -1,6 +1,6 @@
 import { tsquery } from "@phenomnomnominal/tsquery";
 import { CompilerPackageNames } from "@ts-ast-viewer/shared";
-import { camelCase, capitalCase, constantCase, dotCase, headerCase, noCase, paramCase, pascalCase, pathCase, sentenceCase, snakeCase } from "change-case";
+import { paramCase } from "change-case";
 import ts from "typescript";
 import { AllActions } from "../actions";
 import { CompilerApi, convertOptions, createSourceFile } from "../compiler";
@@ -31,11 +31,13 @@ function renderFunction(code: string): string {
   )`;
 }
 function compileFunction(code: string, context: any) {
+  // eslint-disable-next-line no-eval
   return eval(renderFunction(code));
 }
 const refReplaceFactory = (props: any, comp: any) => {
   return function(code: string) {
     for (const key in props) {
+      // eslint-disable-next-line no-loop-func
       comp[key].forEach((ref: any) => {
         Object.keys(props[key]).forEach(k => {
           if (ref[k]) {
