@@ -1,0 +1,13 @@
+diff --git a/node_modules/@phenomnomnominal/tsquery/dist/src/parse.js b/node_modules/@phenomnomnominal/tsquery/dist/src/parse.js
+index 0a47552..0dbe050 100644
+--- a/node_modules/@phenomnomnominal/tsquery/dist/src/parse.js
++++ b/node_modules/@phenomnomnominal/tsquery/dist/src/parse.js
+@@ -1,7 +1,7 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ // Dependencies:
+-var esquery = require("esquery");
++var esquery = require("esquery").default;
+ var typescript_1 = require("typescript");
+ // Constants:
+ var IDENTIFIER_QUERY = 'identifier';

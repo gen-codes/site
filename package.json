@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "author": "David Sherret",
+  "license": "MIT",
+  "workspaces": [
+    "shared",
+    "site",
+    "e2e"
+  ],
+  "scripts": {
+    "setup": "yarn install && npm run build --prefix shared",
+    "start": "npm run updateCompilerFiles && npm run start --prefix site",
+    "build": "yarn workspaces run build",
+    "postinstall": "yarn patch-package",
+    "format": "dprint fmt",
+    "test": "yarn workspaces run test",
+    "predeploy": "npm run predeploy --prefix site",
+    "updateCompilerFiles": "npm run copyLibFiles && npm run createCompilerVersions && npm run createFactoryCode && npm run createPublicApiInfo",
+    "copyLibFiles": "ts-node --project scripts/tsconfig.json scripts/copyLibFiles.ts ",
+    "createCompilerVersions": "ts-node --project scripts/tsconfig.json scripts/createCompilerVersions.ts",
+    "createFactoryCode": "ts-node --project scripts/tsconfig.json scripts/createFactoryCode.ts",
+    "createPublicApiInfo": "ts-node --project scripts/tsconfig.json scripts/createPublicApiInfo.ts",
+    "cypress:run": "npm run --prefix e2e cypress:wait-run",
+    "cypress": "start npm run start && start npm run cypress:run",
+    "cypress:ci": "npm run start & npm run cypress:run",
+    "cypress:open": "npm run --prefix e2e cypress:open"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/node": "^15.6.1",
+    "cross-env": "^7.0.3",
+    "dts-minify": "^0.2.3",
+    "glob": "^7.1.7",
+    "ts-factory-code-generator-generator": "^0.6.2",
+    "ts-morph": "^11.0.0",
+    "ts-node": "^10.0.0",
+    "dprint": "0.15.4",
+    "patch-package": "1.0.0"
+  }
+}
