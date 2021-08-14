@@ -1,4 +1,4 @@
-import { CompilerPackageNames } from "@ts-ast-viewer/shared";
+import { CompilerPackageNames } from "../shared";
 import * as ts from "typescript";
 
 export interface CompilerApi {

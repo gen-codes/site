@@ -1,4 +1,4 @@
-import { compilerVersionCollection, constants } from "@ts-ast-viewer/shared";
+import { compilerVersionCollection, constants } from "./shared";
 import { AllActions } from "actions";
 import React, { useEffect, useReducer } from "react";
 import * as actions from "./actions";

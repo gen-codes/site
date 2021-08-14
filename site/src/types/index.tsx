@@ -1,4 +1,4 @@
-import { CompilerPackageNames, TreeMode } from "@ts-ast-viewer/shared";
+import { CompilerPackageNames, TreeMode } from "../shared";
 import { CompilerApi, Node, Program, ScriptKind, ScriptTarget, SourceFile, TypeChecker } from "../compiler";
 
 export interface StoreState {

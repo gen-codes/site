@@ -1,4 +1,4 @@
-import { CompilerPackageNames } from "@ts-ast-viewer/shared";
+import { CompilerPackageNames } from "../shared";
 import { CompilerApi } from "./CompilerApi";
 import { importCompilerApi, importLibFiles } from "./compilerVersions.generated";
 

@@ -1,4 +1,4 @@
-import { constants } from "@ts-ast-viewer/shared";
+import { constants } from "../shared";
 import CircularJson from "circular-json";
 import React, { useEffect, useState } from "react";
 import { CommentRange, CompilerApi, FlowNode, getPublicApiInfo, getStartSafe, Node, PublicApiInfo, ReadonlyMap, Signature, SourceFile, Symbol, Type,

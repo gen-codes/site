@@ -1,4 +1,4 @@
-import { constants } from "@ts-ast-viewer/shared";
+import { constants } from "./shared";
 import { useAppContext } from "AppContext";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";

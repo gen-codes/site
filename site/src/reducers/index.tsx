@@ -1,5 +1,5 @@
 import { tsquery } from "@phenomnomnominal/tsquery";
-import { CompilerPackageNames } from "@ts-ast-viewer/shared";
+import { CompilerPackageNames } from "../shared";
 import { paramCase } from "change-case";
 import ts from "typescript";
 import { AllActions } from "../actions";
