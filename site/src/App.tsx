@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { constants } from "./shared";
 import { useAppContext } from "AppContext";
 import { saveAs } from "file-saver";

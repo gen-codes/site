@@ -25,3 +25,4 @@ shared/dist
 site/build
 
 .vercel
+shared/tsconfig.tsbuildinfo

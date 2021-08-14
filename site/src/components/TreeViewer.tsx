@@ -1,5 +1,4 @@
 import { constants, TreeMode } from "../shared";
-import CircularJson from "circular-json";
 import React, { useEffect, useRef } from "react";
 import TreeView from "react-treeview";
 import { CompilerApi, getChildrenFunction, Node, SourceFile } from "../compiler";
