@@ -19,7 +19,7 @@
   "homepage": "./",
   "scripts": {
     "start": "react-app-rewired --max_old_space_size=4096 start",
-    "build": "react-app-rewired --max_old_space_size=4096 build",
+    "build": "CI=false && react-app-rewired --max_old_space_size=4096 build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "CI=false && cross-env NODE_OPTIONS=--max_old_space_size=4096 && npm run build"
