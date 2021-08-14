@@ -23,7 +23,7 @@
     "baseUrl": "./src",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": true,
+    "strict": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true
