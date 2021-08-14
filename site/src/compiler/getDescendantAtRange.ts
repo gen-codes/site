@@ -20,21 +20,18 @@ export function getDescendantAtRange(
         const children = getChildren(node);
         for (const child of children) {
             if (child.kind !== syntaxKinds.SyntaxList) {
-                if (isBeforeRange(child.end)) {
+                if (isBeforeRange(child.end))
                     continue;
-                }
 
                 const childStart = getStartSafe(child, sourceFile);
 
-                if (isAfterRange(childStart)) {
+                if (isAfterRange(childStart))
                     return;
-                }
 
                 const isEndOfFileToken = child.kind === syntaxKinds.EndOfFileToken;
                 const hasSameStart = bestMatch.start === childStart && range[0] === childStart;
-                if (!isEndOfFileToken && !hasSameStart) {
+                if (!isEndOfFileToken && !hasSameStart)
                     bestMatch = { node: child, start: childStart };
-                }
             }
 
             searchDescendants(child);

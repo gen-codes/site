@@ -45,21 +45,26 @@ function getAttributes(el) {
                 if (q(attr, "JsxElement").length) {
                     attrType = "slot";
                     value = attr.initializer.expression.expression;
-                } else if (attr.initializer.text) {
+                }
+                else if (attr.initializer.text) {
                     attrType = "property";
                     value = attr.initializer;
-                } else if (isHtml) {
+                }
+                else if (isHtml) {
                     if (name.getFullText().trim().startsWith("on")) {
                         attrType = "event";
                         value = attr.initializer;
-                    } else if (name.getFullText().trim() === "ref") {
+                    }
+                    else if (name.getFullText().trim() === "ref") {
                         attrType = "ref";
                         value = attr.initializer.expression;
-                    } else {
+                    }
+                    else {
                         attrType = "binding";
                         value = attr.initializer;
                     }
-                } else {
+                }
+                else {
                     attrType = "binding";
                     value = attr.initializer;
                 }
@@ -75,9 +80,8 @@ function getAttributes(el) {
 }
 function getComponent(el) {
     // return el
-    if (!el) {
+    if (!el)
         return null;
-    }
 
     if (el.children) {
         return {
@@ -86,18 +90,21 @@ function getComponent(el) {
             props: getAttributes(el.openingElement),
             children: el.children.map(getComponent),
         };
-    } else if (el.text) {
+    }
+    else if (el.text) {
         return {
             type: "text",
             value: el,
         };
-    } else if (el.tagName) {
+    }
+    else if (el.tagName) {
         return {
             name: el.tagName,
             props: getAttributes(el),
             type: "element",
         };
-    } else if (el.expression) {
+    }
+    else if (el.expression) {
         const expr = el.expression;
         if (expr.condition) {
             return {
@@ -106,13 +113,15 @@ function getComponent(el) {
                 whenTrue: getComponent(expr.whenTrue),
                 whenFalse: getComponent(expr.whenFalse),
             };
-        } else if (expr.operatorToken) {
+        }
+        else if (expr.operatorToken) {
             return {
                 type: "condition",
                 ifCondition: expr.left,
                 whenTrue: getComponent(expr.right),
             };
-        } else if (expr.expression) {
+        }
+        else if (expr.expression) {
             if (expr.arguments) {
                 return {
                     type: "loop",
@@ -157,9 +166,8 @@ function getRefs(func) {
       ]
     `;
 
-        if (!result.length) {
+        if (!result.length)
             refs.push(ref);
-        }
         return result.length;
     });
     return {
@@ -223,7 +231,7 @@ const refReplaceFactory = (props, comp) => {
     return function(code) {
         for (const key in props) {
             comp[key].forEach(ref => {
-                Object.keys(props[key]).forEach((k) => {
+                Object.keys(props[key]).forEach(k => {
                     if (ref[k]) {
                         const name = ref[k].getFullText().trim();
                         code = code.replace(
@@ -238,7 +246,7 @@ const refReplaceFactory = (props, comp) => {
     };
 };
 const angular = ({ component: comp, ...context }) => {
-    const angularProps = (props) => {
+    const angularProps = props => {
         return props.map(prop => {
             switch (prop.type) {
                 case "event":
@@ -256,7 +264,7 @@ const angular = ({ component: comp, ...context }) => {
             }
         }).join(" ");
     };
-    const blockToAngular = (tree) => {
+    const blockToAngular = tree => {
         return tree.map(el => {
             switch (el.type) {
                 case "element":
@@ -265,7 +273,8 @@ const angular = ({ component: comp, ...context }) => {
           <${paramCase(el.name.getFullText())} ${angularProps(el.props)}>
             ${blockToAngular(el.children)}
           </${paramCase(el.name.getFullText())}>`;
-                    } else {
+                    }
+                    else {
                         return `<${paramCase(el.name.getFullText())} ${angularProps(el.props)}/>`;
                     }
                 case "text":
@@ -276,20 +285,20 @@ const angular = ({ component: comp, ...context }) => {
     const refReplace = refReplaceFactory({
         elementRefs: {
             name: {
-                find: (n) => n + ".current",
-                replace: (n) => "this." + n + ".nativeElement",
+                find: n => n + ".current",
+                replace: n => "this." + n + ".nativeElement",
             },
         },
         refs: {
             name: {
-                find: (n) => n + ".current",
-                replace: (n) => "this." + n,
+                find: n => n + ".current",
+                replace: n => "this." + n,
             },
         },
         states: {
             name: {
-                find: (n) => n,
-                replace: (n) => "this." + n,
+                find: n => n,
+                replace: n => "this." + n,
             },
             setter: {
                 find: (n, ref) => `${n}\\((.*?)\\)`,
@@ -298,8 +307,8 @@ const angular = ({ component: comp, ...context }) => {
         },
         inputProps: {
             name: {
-                find: (n) => n,
-                replace: (n) => "this." + n,
+                find: n => n,
+                replace: n => "this." + n,
             },
         },
     }, comp);
@@ -312,7 +321,7 @@ ${
                 console.log(clauses, context.componentsUsed);
                 return !clauses.some(
                     c => !!context.componentsUsed.some(
-                        (co) => c.getFullText().trim() === co.getFullText().trim(),
+                        co => c.getFullText().trim() === co.getFullText().trim(),
                     ),
                 );
             })
@@ -327,15 +336,12 @@ ${
 })
 export class ${comp.name.getText()} {
   ${
-        comp.elementRefs.map(({ name }) =>
-            `@ViewChild("${name.getFullText().trim()}") ${name.getFullText().trim()}: ElementRef | undefined;`
-        )
+        comp.elementRefs.map(({ name }) => `@ViewChild("${name.getFullText().trim()}") ${name.getFullText().trim()}: ElementRef | undefined;`)
             .join("\n")
     }
   ${
-        comp.inputProps.map(({ name, defaultValue }) =>
-            `@Input() ${name.getFullText().trim()}: any ${defaultValue ? `= ${defaultValue.getFullText()}` : ""};`
-        ).join("\n")
+        comp.inputProps.map(({ name, defaultValue }) => `@Input() ${name.getFullText().trim()}: any ${defaultValue ? `= ${defaultValue.getFullText()}` : ""};`)
+            .join("\n")
     }
   ${
         comp.states.map(({ name, value }) => {

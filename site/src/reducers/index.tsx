@@ -1,18 +1,6 @@
 import { tsquery } from "@phenomnomnominal/tsquery";
 import { CompilerPackageNames } from "@ts-ast-viewer/shared";
-import {
-    camelCase,
-    capitalCase,
-    constantCase,
-    dotCase,
-    headerCase,
-    noCase,
-    paramCase,
-    pascalCase,
-    pathCase,
-    sentenceCase,
-    snakeCase,
-} from "change-case";
+import { camelCase, capitalCase, constantCase, dotCase, headerCase, noCase, paramCase, pascalCase, pathCase, sentenceCase, snakeCase } from "change-case";
 import ts from "typescript";
 import { AllActions } from "../actions";
 import { CompilerApi, convertOptions, createSourceFile } from "../compiler";
@@ -49,7 +37,7 @@ const refReplaceFactory = (props: any, comp: any) => {
     return function(code: string) {
         for (const key in props) {
             comp[key].forEach((ref: any) => {
-                Object.keys(props[key]).forEach((k) => {
+                Object.keys(props[key]).forEach(k => {
                     if (ref[k]) {
                         const name = ref[k].getFullText().trim();
                         code = code.replace(
@@ -67,9 +55,8 @@ const refReplaceFactory = (props: any, comp: any) => {
 export function appReducer(state: StoreState, action: AllActions): StoreState {
     switch (action.type) {
         case actionNames.CREATE_GENERATOR: {
-            if (state.compiler == null) {
+            if (state.compiler == null)
                 return state;
-            }
 
             return {
                 ...state,
@@ -84,9 +71,8 @@ export function appReducer(state: StoreState, action: AllActions): StoreState {
             };
         }
         case actionNames.SELECT_GENERATOR: {
-            if (state.compiler == null) {
+            if (state.compiler == null)
                 return state;
-            }
             console.log(action.name);
             return {
                 ...state,
@@ -97,9 +83,8 @@ export function appReducer(state: StoreState, action: AllActions): StoreState {
             };
         }
         case actionNames.SET_GENERATOR: {
-            if (state.compiler == null || typeof (state.compiler?.selectedGenerator) !== "string") {
+            if (state.compiler == null || typeof (state.compiler?.selectedGenerator) !== "string")
                 return state;
-            }
             let generatedCode = " ";
             action.code = localStorage.getItem("generator-code-" + state.compiler.selectedGenerator) || action.code;
 
@@ -128,9 +113,9 @@ export function appReducer(state: StoreState, action: AllActions): StoreState {
         }
 
         case actionNames.SET_QUERY: {
-            if (state.compiler == null) {
+            if (state.compiler == null)
                 return state;
-            } else {
+            else {
                 action.query = localStorage.getItem("query-code") || action.query;
                 const q = createQ(state);
                 let results;
@@ -163,9 +148,8 @@ export function appReducer(state: StoreState, action: AllActions): StoreState {
             }
         }
         case actionNames.SET_SELECTED_NODE: {
-            if (state.compiler == null) {
+            if (state.compiler == null)
                 return state;
-            }
 
             return {
                 ...state,
@@ -235,9 +219,8 @@ function createQ(state: StoreState) {
         }
         const queryString = str.map((part, idx) => `${part.replace(/\n/g, "") || ""}${args[idx] || ""}`).filter(p => p)
             .join("");
-        if (index !== -1) {
+        if (index !== -1)
             return data && queryAst(data, queryString)[index];
-        }
         return data && queryAst(data, queryString);
     };
 }

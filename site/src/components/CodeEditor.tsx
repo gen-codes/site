@@ -73,17 +73,15 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
 
         function getClassNames(showInfo: boolean | undefined) {
             const classNames = ["codeEditor"];
-            if (showInfo) {
+            if (showInfo)
                 classNames.push("hasInfo");
-            }
             return classNames.join(" ");
         }
     }
 
     componentWillUnmount() {
-        for (const disposable of this.disposables) {
+        for (const disposable of this.disposables)
             disposable.dispose();
-        }
         this.disposables.length = 0; // clear
     }
 
@@ -98,13 +96,11 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
     private deltaDecorations: string[] = [];
     private lineAndColumnComputer = new LineAndColumnComputer("");
     private updateHighlight() {
-        if (this.editor == null) {
+        if (this.editor == null)
             return;
-        }
 
-        if (this.lineAndColumnComputer.text !== this.props.text) {
+        if (this.lineAndColumnComputer.text !== this.props.text)
             this.lineAndColumnComputer = new LineAndColumnComputer(this.props.text);
-        }
 
         const { highlight } = this.props;
         const lineAndColumnComputer = this.lineAndColumnComputer;
@@ -119,9 +115,8 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
         );
 
         function getRange(): monacoEditorForTypes.IRange | undefined {
-            if (highlight == null) {
+            if (highlight == null)
                 return undefined;
-            }
 
             const startInfo = lineAndColumnComputer.getNumberAndColumnFromPos(highlight.start);
             const endInfo = lineAndColumnComputer.getNumberAndColumnFromPos(highlight.end);
@@ -136,9 +131,8 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
     }
 
     private getEditor() {
-        if (this.state.editorComponent == null) {
+        if (this.state.editorComponent == null)
             return <Spinner backgroundColor="#1e1e1e" />;
-        }
         if (this.state.editorComponent === false) {
             return (
                 <div className={"errorMessage"}>
@@ -179,14 +173,12 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
 
         // use lf newlines
         editor.getModel()?.setEOL(monaco.editor.EndOfLineSequence.LF);
-        if (this.props.onSave) {
+        if (this.props.onSave)
             editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, this.props.onSave);
-        }
         this.disposables.push(editor.onDidChangeCursorPosition(e => {
             const editorModel = editor.getModel();
-            if (editorModel == null) {
+            if (editorModel == null)
                 return;
-            }
 
             this.setState({
                 position: editorModel.getOffsetAt(e.position),
@@ -195,9 +187,8 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
             });
         }));
         this.disposables.push(editor.onMouseDown(e => {
-            if (e.target == null || e.target.range == null || this.props.onClick == null) {
+            if (e.target == null || e.target.range == null || this.props.onClick == null)
                 return;
-            }
 
             // Sometimes e.target.range will be the column right before if clicked to the left enough,
             // but the cursor position will still be at the next column. For that reason, always
@@ -214,15 +205,13 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
         let lastWidth = 0;
         const intervalId = setInterval(() => {
             const containerElement = this.outerContainerRef.current;
-            if (containerElement == null) {
+            if (containerElement == null)
                 return;
-            }
 
             const width = containerElement.offsetWidth;
             const height = containerElement.offsetHeight;
-            if (lastHeight === height && lastWidth === width) {
+            if (lastHeight === height && lastWidth === width)
                 return;
-            }
 
             editor.layout();
 
@@ -233,8 +222,7 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
 
         this.updateHighlight();
 
-        if (this.props.editorDidMount) {
+        if (this.props.editorDidMount)
             this.props.editorDidMount(editor, monaco);
-        }
     }
 }

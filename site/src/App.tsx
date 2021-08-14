@@ -93,7 +93,7 @@ const CreateGeneratorInput = memo(({ dispatch }: any) => {
     const [value, setValue] = useState("");
     return (
         <>
-            <input value={value} onChange={(e) => setValue(e.target.value)}></input>
+            <input value={value} onChange={e => setValue(e.target.value)}></input>
             <button
                 onClick={() => {
                     dispatch({ type: "CREATE_GENERATOR", name: value });
@@ -112,7 +112,7 @@ const SelectGeneratorInput = memo(({ dispatch, generators, selectedGenerator }: 
             <label>
                 Select Generator
                 <select
-                    onChange={(e) => {
+                    onChange={e => {
                         dispatch({ type: "SELECT_GENERATOR", name: e.target.value });
                     }}
                     value={selectedGenerator}
@@ -157,9 +157,8 @@ export default function ${name}(){
 export function App() {
     const { state, dispatch } = useAppContext();
     const compiler = state.compiler;
-    if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading) {
+    if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading)
         return <components.Spinner />;
-    }
 
     console.log(compiler.generators);
     return (
@@ -285,9 +284,8 @@ export function App() {
     );
 
     function getCodeHighlightRange() {
-        if (compiler == null) {
+        if (compiler == null)
             return undefined;
-        }
 
         const { selectedNode, sourceFile } = compiler;
         return selectedNode === sourceFile ? undefined : {
@@ -304,14 +302,14 @@ export function App() {
                     {getFactoryCodeEditor()}
                 </SplitPane>
             );
-        } else {
+        }
+        else {
             return getCodeEditor();
         }
 
         function getFactoryCodeEditor() {
-            if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading) {
+            if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading)
                 return <components.Spinner />;
-            }
 
             return (
                 <components.ErrorBoundary getResetHash={() => state.code}>
@@ -326,9 +324,8 @@ export function App() {
                     id={constants.css.mainCodeEditor.id}
                     onChange={code => dispatch({ type: "SET_CODE", code })}
                     onClick={range => {
-                        if (compiler == null) {
+                        if (compiler == null)
                             return;
-                        }
                         const descendant = getDescendantAtRange(
                             state.options.treeMode,
                             compiler.sourceFile,
@@ -348,9 +345,9 @@ export function App() {
     }
 
     function getCompilerDependentPanes() {
-        if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading) {
+        if (compiler == null || state.apiLoadingState === ApiLoadingState.Loading)
             return <components.Spinner />;
-        } else if (state.apiLoadingState === ApiLoadingState.Error) {
+        else if (state.apiLoadingState === ApiLoadingState.Error) {
             return (
                 <div className={"errorMessage"}>
                     Error loading compiler API. Please refresh the page to try again.
@@ -391,9 +388,8 @@ export function App() {
         // global method for cypress
         (window as any).setMonacoEditorText = (text: string) => {
             const editorModel = editor.getModel();
-            if (editorModel == null) {
+            if (editorModel == null)
                 return;
-            }
 
             editor.executeEdits("my-source", [{
                 range: editorModel.getFullModelRange(),

@@ -14,20 +14,17 @@ export function getCompilerVersions() {
             continue;
         }
 
-        if (!keyRegEx.test(key)) {
+        if (!keyRegEx.test(key))
             continue;
-        }
         const matches = versionRegEx.exec(dependencies[key])!;
         versions.push({ version: matches[0], name: key });
     }
 
     return versions.sort((a, b) => {
-        if (a.version.startsWith("@next")) {
+        if (a.version.startsWith("@next"))
             return 1;
-        }
-        if (b.version.startsWith("@next")) {
+        if (b.version.startsWith("@next"))
             return -1;
-        }
         return a.version > b.version ? -1 : 1;
     });
 }

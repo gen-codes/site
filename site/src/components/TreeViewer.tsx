@@ -15,13 +15,11 @@ export interface TreeViewerProps {
 function TreeItem({ kindName, i, label, n, renderNode, getChildren, childrenArr, isSelected }: any) {
     const r = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        if (isSelected) {
+        if (isSelected)
             r.current && r.current.scrollIntoView();
-        }
     }, [isSelected]);
-    if (childrenArr.length === 0) {
+    if (childrenArr.length === 0)
         return <div ref={r} key={i++} className="endNode" data-name={kindName}>{label}</div>;
-    }
     return (
         <div ref={r} data-name={kindName} key={i++}>
             <TreeView nodeLabel={label}>
@@ -70,9 +68,8 @@ export function ResultViewer(props: ResultViewerProps) {
     return <div id={constants.css.treeViewer.id}>{renderNode(results, getChildrenFunction(mode, sourceFile))}</div>;
 
     function renderNode(node: Node, getChildren: (node: Node) => (Node[])): JSX.Element {
-        if (!node) {
+        if (!node)
             return <>empty</>;
-        }
         if (node.kind) {
             // return (
             //   <>{node.kind}</>
@@ -82,9 +79,9 @@ export function ResultViewer(props: ResultViewerProps) {
                 + (node === selectedNode ? " " + constants.css.treeViewer.selectedNodeClass : "");
             const kindName = getSyntaxKindName(api, node.kind);
             const label = <div onClick={() => onSelectNode(node)} className={className}>{kindName}</div>;
-            if (children.length === 0) {
+            if (children.length === 0)
                 return <div key={i++} className="endNode" data-name={kindName}>{label} {node.getFullText()}</div>;
-            } else {
+            else {
                 return (
                     <div data-name={kindName} key={i++}>
                         <TreeView nodeLabel={label} defaultCollapsed>
@@ -93,7 +90,8 @@ export function ResultViewer(props: ResultViewerProps) {
                     </div>
                 );
             }
-        } else if (typeof node === "object") {
+        }
+        else if (typeof node === "object") {
             return (
                 <>
                     {Object.entries(node).map(([label, children]) => {
@@ -113,7 +111,8 @@ export function ResultViewer(props: ResultViewerProps) {
                                     </TreeView>
                                 </div>
                             );
-                        } else {
+                        }
+                        else {
                             return (
                                 <div key={i++}>
                                     <TreeView nodeLabel={label}>
@@ -125,7 +124,8 @@ export function ResultViewer(props: ResultViewerProps) {
                     })}
                 </>
             );
-        } else {
+        }
+        else {
             return <div key={i++} className="endNode">{node}</div>;
         }
     }

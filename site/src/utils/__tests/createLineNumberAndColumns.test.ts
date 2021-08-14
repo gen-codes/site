@@ -19,6 +19,10 @@ describe("createLineNumberAndColumns", () => {
     });
 
     it("should get for multiple lines ending with a newline", () => {
-        doTest("test\nasdf\n", [{ pos: 0, length: 4, number: 1 }, { pos: 5, length: 4, number: 2 }, { pos: 10, length: 0, number: 3 }]);
+        doTest("test\nasdf\n", [{ pos: 0, length: 4, number: 1 }, { pos: 5, length: 4, number: 2 }, {
+            pos: 10,
+            length: 0,
+            number: 3,
+        }]);
     });
 });

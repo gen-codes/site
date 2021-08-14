@@ -84,10 +84,13 @@ describe("StateSaver", () => {
 
     it("should upgrade from version 1", () => {
         const { saver, localStorage } = setup();
-        localStorage.setItem(StateSaver._stateKey, JSON.stringify({
-            version: 1,
-            treeMode: TreeMode.getChildren,
-        }));
+        localStorage.setItem(
+            StateSaver._stateKey,
+            JSON.stringify({
+                version: 1,
+                treeMode: TreeMode.getChildren,
+            }),
+        );
 
         expect(saver.get()).toEqual({
             version: 3,
@@ -99,11 +102,14 @@ describe("StateSaver", () => {
 
     it("should upgrade from version 2", () => {
         const { saver, localStorage } = setup();
-        localStorage.setItem(StateSaver._stateKey, JSON.stringify({
-            version: 2,
-            treeMode: TreeMode.getChildren,
-            showFactoryCode: false,
-        }));
+        localStorage.setItem(
+            StateSaver._stateKey,
+            JSON.stringify({
+                version: 2,
+                treeMode: TreeMode.getChildren,
+                showFactoryCode: false,
+            }),
+        );
 
         expect(saver.get()).toEqual({
             version: 3,

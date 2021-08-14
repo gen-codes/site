@@ -52,7 +52,7 @@ export function Options(props: OptionsProps) {
                 onChange={event => onChange({ compilerPackageName: event.target.value as CompilerPackageNames })}
             >
                 {compilerVersionCollection.map(
-                    v => <option value={v.packageName} key={v.packageName}>{v.version}</option>
+                    v => <option value={v.packageName} key={v.packageName}>{v.version}</option>,
                 )}
             </select>
         );
@@ -75,9 +75,8 @@ export function Options(props: OptionsProps) {
 
     function getScriptKind() {
         const { api } = props;
-        if (api == null) {
+        if (api == null)
             return undefined;
-        }
         return getEnumOption(
             "Script kind",
             "ts.ScriptKind",
@@ -89,9 +88,8 @@ export function Options(props: OptionsProps) {
 
     function getScriptTarget() {
         const { api } = props;
-        if (api == null) {
+        if (api == null)
             return undefined;
-        }
         return getEnumOption(
             "Script target",
             "ts.ScriptTarget",
@@ -152,9 +150,7 @@ export function Options(props: OptionsProps) {
     ) {
         const selection = (
             <select value={currentValue} onChange={event => onChange(parseInt(event.target.value, 10))}>
-                {EnumUtils.getNamesForValues(e).map(namesForValue =>
-                    getOption(namesForValue.value, namesForValue.names)
-                )}
+                {EnumUtils.getNamesForValues(e).map(namesForValue => getOption(namesForValue.value, namesForValue.names))}
             </select>
         );
         return <Option name={name} value={selection} />;

@@ -27,12 +27,10 @@ export function FactoryCodeEditor(props: FactoryCodeEditorProps) {
         });
     }, [props.compiler.packageName]);
 
-    if (factoryCodeGenerator == null) {
+    if (factoryCodeGenerator == null)
         return <Spinner backgroundColor="#1e1e1e" />;
-    }
-    if (factoryCodeGenerator === false) {
+    if (factoryCodeGenerator === false)
         return <div className={"errorMessage"}>Error loading factory code. Please refresh the page to try again.</div>;
-    }
 
     return (
         <CodeEditor
@@ -44,9 +42,8 @@ export function FactoryCodeEditor(props: FactoryCodeEditorProps) {
     );
 
     function getText() {
-        if (factoryCodeGenerator == null || factoryCodeGenerator === false) {
+        if (factoryCodeGenerator == null || factoryCodeGenerator === false)
             return "";
-        }
 
         return factoryCodeGenerator.value(props.compiler.api, props.compiler.selectedNode);
     }

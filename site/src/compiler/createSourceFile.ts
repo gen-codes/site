@@ -1,14 +1,5 @@
 import { assertNever } from "../utils";
-import {
-    CompilerApi,
-    CompilerHost,
-    CompilerOptions,
-    Program,
-    ScriptKind,
-    ScriptTarget,
-    SourceFile,
-    TypeChecker,
-} from "./CompilerApi";
+import { CompilerApi, CompilerHost, CompilerOptions, Program, ScriptKind, ScriptTarget, SourceFile, TypeChecker } from "./CompilerApi";
 
 export function createSourceFile(api: CompilerApi, code: string, scriptTarget: ScriptTarget, scriptKind: ScriptKind) {
     const filePath = `/ts-ast-viewer${getExtension(api, scriptKind)}`;
@@ -19,9 +10,8 @@ export function createSourceFile(api: CompilerApi, code: string, scriptTarget: S
 
     // binding may be disabled, so make this deferred
     function getBindingTools() {
-        if (bindingResult == null) {
+        if (bindingResult == null)
             bindingResult = getBindingResult();
-        }
         return bindingResult;
     }
 
@@ -43,8 +33,7 @@ export function createSourceFile(api: CompilerApi, code: string, scriptTarget: S
             },
             // getSourceFileByPath: (...) => {}, // not providing these will force it to use the file name as the file path
             // getDefaultLibLocation: (...) => {},
-            getDefaultLibFileName: (defaultLibOptions: CompilerOptions) =>
-                "/" + api.getDefaultLibFileName(defaultLibOptions),
+            getDefaultLibFileName: (defaultLibOptions: CompilerOptions) => "/" + api.getDefaultLibFileName(defaultLibOptions),
             writeFile: () => {
                 // do nothing
             },

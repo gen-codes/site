@@ -4,9 +4,8 @@ import constants from "./constants";
 let visited = false;
 export function visitSite() {
     // this is a quick fix to speed up the tests
-    if (visited) {
+    if (visited)
         return;
-    }
     cy.visit(constants.siteUrl, {
         retryOnStatusCodeFailure: true,
         onLoad: () => {
@@ -67,9 +66,9 @@ export function selectNode(...selection: string[]) {
 }
 
 export function forAllCompilerVersions(action: (version: CompilerPackageNames) => void) {
-    if (process.env.CI != null) {
+    if (process.env.CI != null)
         action("typescript-next" as any);
-    } else {
+    else {
         action(compilerVersionCollection[0].packageName);
         // todo: make testing everything configurable
         // for (const versionInfo of compilerVersionCollection)
@@ -125,13 +124,13 @@ export function checkTreeView(tree: TreeViewNode) {
             it(`should not have children (${name})`, () => {
                 getCurrentElement().should("have.class", "endNode");
             });
-        } else {
+        }
+        else {
             it(`should have children (${name})`, () => {
                 getCurrentElement().should("not.have.class", "endNode");
             });
 
-            const getTreeViewChildrenElement = () =>
-                getCurrentElement().find(">.tree-view >.tree-view_children").first();
+            const getTreeViewChildrenElement = () => getCurrentElement().find(">.tree-view >.tree-view_children").first();
             it(`should have the correct amount of children (${name})`, () => {
                 getTreeViewChildrenElement().children().should("have.length", node.children!.length);
             });
@@ -220,7 +219,8 @@ export function checkType(type: Type | "none" | undefined) {
             getMainElement().should("not.exist");
         });
         return;
-    } else if (type === "none") {
+    }
+    else if (type === "none") {
         it("should have a [None] type", () => {
             getMainElement().should("have.text", "[None]");
         });
@@ -246,7 +246,8 @@ export function checkSymbol(symbol: Symbol | "none" | undefined) {
             getMainElement().should("not.exist");
         });
         return;
-    } else if (symbol === "none") {
+    }
+    else if (symbol === "none") {
         it("should have a [None] symbol", () => {
             getMainElement().should("have.text", "[None]");
         });
@@ -272,7 +273,8 @@ export function checkSignature(signature: Signature | "none" | undefined) {
             getMainElement().should("not.exist");
         });
         return;
-    } else if (signature === "none") {
+    }
+    else if (signature === "none") {
         it("should have a [None] signature", () => {
             getMainElement().should("have.text", "[None]");
         });
@@ -297,7 +299,8 @@ export function checkFactoryCode(expectedCode: string | undefined) {
         it("should not have the factory code open", () => {
             getMainElement().should("not.exist");
         });
-    } else {
+    }
+    else {
         it("should have the factory code open", () => {
             getMainElement().should("exist");
         });

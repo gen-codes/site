@@ -42,9 +42,8 @@ sharedCompilerVersionsFile.addStatements([writer => {
                 for (let i = 0; i < versions.length; i++) {
                     const version = versions[i];
                     writer.write(`{ version: "${version.version}", packageName: "${version.name}" }`);
-                    if (i < versions.length - 1) {
+                    if (i < versions.length - 1)
                         writer.write(",");
-                    }
                     writer.newLine();
                 }
             });

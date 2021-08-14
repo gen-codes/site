@@ -1,21 +1,8 @@
 import { constants } from "@ts-ast-viewer/shared";
 import CircularJson from "circular-json";
 import React, { useEffect, useState } from "react";
-import {
-    CommentRange,
-    CompilerApi,
-    FlowNode,
-    getPublicApiInfo,
-    getStartSafe,
-    Node,
-    PublicApiInfo,
-    ReadonlyMap,
-    Signature,
-    SourceFile,
-    Symbol,
-    Type,
-    TypeChecker,
-} from "../compiler";
+import { CommentRange, CompilerApi, FlowNode, getPublicApiInfo, getStartSafe, Node, PublicApiInfo, ReadonlyMap, Signature, SourceFile, Symbol, Type,
+    TypeChecker } from "../compiler";
 import { BindingTools, CompilerState } from "../types";
 import { ArrayUtils, getEnumFlagNames, getSyntaxKindName } from "../utils";
 import { LazyTreeView } from "./LazyTreeView";
@@ -53,9 +40,8 @@ export function PropertiesViewer(props: PropertiesViewerProps) {
         sourceFile,
     };
 
-    if (publicApiInfo == null) {
+    if (publicApiInfo == null)
         return <Spinner backgroundColor="#1e1e1e" />;
-    }
 
     return (
         <div className="propertiesViewer">
@@ -145,26 +131,22 @@ function getForSelectedNode(context: Context, selectedNode: Node) {
     }
 
     function getForCommentRanges(name: string, commentRanges: CommentRange[] | undefined) {
-        if (commentRanges == null) {
+        if (commentRanges == null)
             return getTextDiv(name, "undefined");
-        } else {
+        else
             return getArrayDiv(context, name, commentRanges);
-        }
     }
 }
 
 function getForType(context: Context, node: Node, typeChecker: TypeChecker) {
-    if (node.kind === context.api.SyntaxKind.SourceFile) {
+    if (node.kind === context.api.SyntaxKind.SourceFile)
         return <>[None]</>;
-    }
 
     const type = getOrReturnError(() => typeChecker.getTypeAtLocation(node));
-    if (type == null) {
+    if (type == null)
         return <>[None]</>;
-    }
-    if (typeof type === "string") {
+    if (typeof type === "string")
         return <>[Error getting type: {type}]</>;
-    }
 
     return getTreeView(context, type, getTypeToString() || "Type");
 
@@ -178,15 +160,11 @@ function getForType(context: Context, node: Node, typeChecker: TypeChecker) {
 }
 
 function getForSymbol(context: Context, node: Node, typeChecker: TypeChecker) {
-    const symbol = getOrReturnError(() =>
-        ((node as any).symbol as Symbol | undefined) || typeChecker.getSymbolAtLocation(node)
-    );
-    if (symbol == null) {
+    const symbol = getOrReturnError(() => ((node as any).symbol as Symbol | undefined) || typeChecker.getSymbolAtLocation(node));
+    if (symbol == null)
         return <>[None]</>;
-    }
-    if (typeof symbol === "string") {
+    if (typeof symbol === "string")
         return <>[Error getting symbol: {symbol}]</>;
-    }
 
     return getTreeView(context, symbol, getSymbolName() || "Symbol");
 
@@ -201,18 +179,16 @@ function getForSymbol(context: Context, node: Node, typeChecker: TypeChecker) {
 
 function getForSignature(context: Context, node: Node, typeChecker: TypeChecker) {
     const signature = getOrReturnError(() => typeChecker.getSignatureFromDeclaration(node as any));
-    if (signature == null || typeof signature === "string") {
+    if (signature == null || typeof signature === "string")
         return <>[None]</>;
-    }
 
     return getTreeView(context, signature, "Signature");
 }
 
 function getForFlowNode(context: Context, node: Node, typeChecker: TypeChecker) {
     const nodeWithFlowNode = node as Node & { flowNode?: FlowNode };
-    if (nodeWithFlowNode.flowNode == null) {
+    if (nodeWithFlowNode.flowNode == null)
         return <>[None]</>;
-    }
 
     return getTreeView(context, nodeWithFlowNode.flowNode, "FlowNode");
 }
@@ -250,28 +226,27 @@ function getProperties(context: Context, obj: any) {
     return values;
 
     function getNodeKeyValue(key: string, value: any, parent: any): JSX.Element {
-        if (value === null) {
+        if (value === null)
             return getTextDiv(key, "null");
-        } else if (value === undefined) {
+        else if (value === undefined)
             return getTextDiv(key, "undefined");
-        } else if (value instanceof Array) {
+        else if (value instanceof Array)
             return getArrayDiv(context, key, value);
-        } else if (isTsNode(value)) {
+        else if (isTsNode(value))
             return getNodeDiv(context, key, value);
-        } else if (isMap(value)) {
+        else if (isMap(value))
             return getMapDiv(context, key, value);
-        } else if (typeof value === "object") {
+        else if (typeof value === "object")
             return getObjectDiv(context, key, value);
-        } else {
+        else
             return getCustomValueDiv(context, key, value, parent);
-        }
     }
 }
 
 function getArrayDiv(context: Context, key: string, value: unknown[]) {
-    if (value.length === 0) {
+    if (value.length === 0)
         return getTextDiv(key, "[]");
-    } else {
+    else {
         return (
             <div className="array" key={key} data-name={key}>
                 <div className="key">{key}: [</div>
@@ -284,9 +259,9 @@ function getArrayDiv(context: Context, key: string, value: unknown[]) {
 
 function getMapDiv(context: Context, key: string, value: ReadonlyMap<unknown>) {
     const entries = ArrayUtils.from(value.entries());
-    if (entries.length === 0) {
+    if (entries.length === 0)
         return getTextDiv(key, "{}");
-    } else {
+    else {
         return (
             <div className="array" key={key} data-name={key}>
                 <div className="key">{key}:{"{"}</div>
@@ -298,9 +273,9 @@ function getMapDiv(context: Context, key: string, value: ReadonlyMap<unknown>) {
 }
 
 function getObjectDiv(context: Context, key: string, value: unknown) {
-    if (getObjectKeyInfo(context, value).length === 0) {
+    if (getObjectKeyInfo(context, value).length === 0)
         return getTextDiv(key, "{}");
-    } else {
+    else {
         return (
             <div className="object" key={key} data-name={key}>
                 <div className="key">{key}:</div>
@@ -327,18 +302,14 @@ function getCustomValueDiv(context: Context, key: string, value: any, parent: an
                     return getEnumFlagElement(context.api.NodeFlags, value);
             }
         }
-        if (isTsType(parent) && key === "objectFlags") {
+        if (isTsType(parent) && key === "objectFlags")
             return getEnumFlagElement(context.api.ObjectFlags, value);
-        }
-        if (isTsType(parent) && key === "flags") {
+        if (isTsType(parent) && key === "flags")
             return getEnumFlagElement(context.api.TypeFlags, value);
-        }
-        if (isTsSymbol(parent) && key === "flags") {
+        if (isTsSymbol(parent) && key === "flags")
             return getEnumFlagElement(context.api.SymbolFlags, value);
-        }
-        if (isFlowNode(parent) && key === "flags") {
+        if (isFlowNode(parent) && key === "flags")
             return getEnumFlagElement(context.api.FlowFlags, value);
-        }
         return CircularJson.stringify(value);
     }
 }
@@ -365,15 +336,12 @@ function getTreeNode(context: Context, value: any, key?: string, index?: number)
     const labelName = getLabelName(context, value);
     key = getKey();
 
-    if (typeof value === "string") {
+    if (typeof value === "string")
         return getTextDiv(key, `"${value}"`);
-    }
-    if (typeof value === "number") {
+    if (typeof value === "number")
         return getTextDiv(key, value.toString());
-    }
-    if (typeof value === "boolean") {
+    if (typeof value === "boolean")
         return getTextDiv(key, value.toString());
-    }
     return (
         <LazyTreeView
             nodeLabel={key}
@@ -384,35 +352,28 @@ function getTreeNode(context: Context, value: any, key?: string, index?: number)
     );
 
     function getKey() {
-        if (key == null) {
+        if (key == null)
             return labelName;
-        } else if (labelName != null) {
+        else if (labelName != null)
             return `${key}: ${getLabelName(context, value)}`;
-        }
         return key;
     }
 }
 
 function getLabelName(context: Context, obj: any) {
-    if (obj == null) {
+    if (obj == null)
         return undefined;
-    }
-    if (isTsNode(obj)) {
+    if (isTsNode(obj))
         return appendName(getSyntaxKindName(context.api, obj.kind));
-    }
-    if (isTsSignature(obj)) {
+    if (isTsSignature(obj))
         return appendName("Signature");
-    }
-    if (isTsType(obj)) {
+    if (isTsType(obj))
         return appendName("Type");
-    }
-    if (isTsSymbol(obj)) {
+    if (isTsSymbol(obj))
         return appendName("Symbol");
-    }
     const objType = typeof obj;
-    if (objType === "string" || objType === "number" || objType === "boolean") {
+    if (objType === "string" || objType === "number" || objType === "boolean")
         return undefined;
-    }
     return appendName("Object");
 
     function appendName(title: string) {
@@ -422,9 +383,8 @@ function getLabelName(context: Context, obj: any) {
 
     function getName() {
         try {
-            if (typeof obj.getName === "function") {
+            if (typeof obj.getName === "function")
                 return obj.getName();
-            }
             if (isTsNode(obj) && (obj as any).name != null) {
                 const name = (obj as any).name as Node;
                 return name.getText();
@@ -437,9 +397,8 @@ function getLabelName(context: Context, obj: any) {
 }
 
 function getObjectKeyInfo(context: Context, obj: any) {
-    if (obj == null) {
+    if (obj == null)
         return [];
-    }
     return Object.keys(obj)
         .map(key => ({
             key,
@@ -447,9 +406,8 @@ function getObjectKeyInfo(context: Context, obj: any) {
             value: obj[key],
         }))
         .filter(kv => {
-            if (kv.permission === false) {
+            if (kv.permission === false)
                 return false;
-            }
             return context.showInternals || kv.permission !== "internal";
         });
 }
@@ -459,30 +417,24 @@ const typeDisallowedKeys = new Set(["checker", "symbol"]);
 function getKeyPermission(context: Context, obj: any, key: string): true | false | "internal" {
     const { publicApiInfo } = context;
     if (isTsNode(obj)) {
-        if (nodeDisallowedKeys.has(key)) {
+        if (nodeDisallowedKeys.has(key))
             return false;
-        }
-        if (!publicApiInfo) {
+        if (!publicApiInfo)
             return true;
-        }
         const kindName = getSyntaxKindName(context.api, obj.kind);
         return hasInProperties(publicApiInfo.nodePropertiesBySyntaxKind.get(kindName));
     }
-    if (isTsType(obj)) {
+    if (isTsType(obj))
         return !typeDisallowedKeys.has(key) && hasInProperties(publicApiInfo && publicApiInfo.typeProperties);
-    }
-    if (isTsSignature(obj)) {
+    if (isTsSignature(obj))
         return hasInProperties(publicApiInfo && publicApiInfo.signatureProperties);
-    }
-    if (isTsSymbol(obj)) {
+    if (isTsSymbol(obj))
         return hasInProperties(publicApiInfo && publicApiInfo.symbolProperties);
-    }
     return true;
 
     function hasInProperties(publicApiProperties: Set<string> | undefined | false) {
-        if (!publicApiProperties) {
+        if (!publicApiProperties)
             return true;
-        }
         return publicApiProperties.has(key) ? true : "internal";
     }
 }
@@ -505,9 +457,8 @@ function isTsSymbol(value: any): value is Symbol {
 }
 
 function isTsSignature(value: any): value is Signature {
-    if (value.declaration == null) {
+    if (value.declaration == null)
         return false;
-    }
     return isTsNode(value.declaration);
 }
 
@@ -518,9 +469,8 @@ function isFlowNode(value: any): value is FlowNode {
 
 function getEnumFlagElement(enumObj: any, value: number) {
     const names = getEnumFlagNames(enumObj, value);
-    if (names.length === 0) {
+    if (names.length === 0)
         return <>{value}</>;
-    }
 
     return <ToolTippedText text={value.toString()}>{getNames()}</ToolTippedText>;
 

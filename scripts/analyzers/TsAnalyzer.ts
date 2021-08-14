@@ -29,9 +29,8 @@ export class TsAnalyzer {
         for (const [kindText, node] of getNodes()) {
             const properties = getResultPropertiesSetForKind(kindText);
             for (const prop of node.getDeclaredType().getProperties()) {
-                if (isAllowedProperty(prop)) {
+                if (isAllowedProperty(prop))
                     properties.add(prop.getName());
-                }
             }
         }
 
@@ -44,22 +43,19 @@ export class TsAnalyzer {
         function* getNodes() {
             for (const symbol of exports) {
                 const kindText = getKindOfNodeSymbol(symbol);
-                if (kindText != null) {
+                if (kindText != null)
                     yield [kindText, symbol] as const;
-                }
             }
         }
 
         function getKindOfNodeSymbol(symbol: Symbol) {
             const kind = symbol.getMember("kind");
-            if (kind == null) {
+            if (kind == null)
                 return undefined;
-            }
             const kindDeclaration = kind.getDeclarations()[0];
             const kindTypeText = kind.getTypeAtLocation(kindDeclaration).getText(kindDeclaration);
-            if (!kindTypeText.startsWith("SyntaxKind.")) {
+            if (!kindTypeText.startsWith("SyntaxKind."))
                 return undefined;
-            }
             return kindTypeText.replace(/^SyntaxKind\./, "");
         }
 
@@ -82,9 +78,8 @@ export class TsAnalyzer {
 
         for (const symbol of getSymbolSymbols()) {
             for (const prop of symbol.getDeclaredType().getProperties()) {
-                if (isAllowedProperty(prop)) {
+                if (isAllowedProperty(prop))
                     properties.add(prop.getName());
-                }
             }
         }
 
@@ -93,20 +88,17 @@ export class TsAnalyzer {
         function* getSymbolSymbols() {
             for (const symbol of exports) {
                 const type = symbol.getDeclaredType();
-                if (hasBaseSymbolType(type)) {
+                if (hasBaseSymbolType(type))
                     yield symbol;
-                }
             }
 
             function hasBaseSymbolType(type: Type) {
-                if (type === symbolType) {
+                if (type === symbolType)
                     return true;
-                }
 
                 for (const baseType of type.getBaseTypes()) {
-                    if (hasBaseSymbolType(baseType)) {
+                    if (hasBaseSymbolType(baseType))
                         return true;
-                    }
                 }
 
                 return false;
@@ -117,8 +109,7 @@ export class TsAnalyzer {
 
 function isAllowedProperty(prop: Symbol) {
     const name = prop.getName();
-    if (name.startsWith("_") && name.endsWith("Brand")) {
+    if (name.startsWith("_") && name.endsWith("Brand"))
         return false;
-    }
     return true;
 }

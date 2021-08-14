@@ -8,9 +8,8 @@ const versions = getCompilerVersions();
 const factoryCodeDir = "./site/src/resources/factoryCode/";
 
 glob(`${factoryCodeDir}/*.ts`, (err, filesToDelete) => {
-    for (const filePath of filesToDelete) {
+    for (const filePath of filesToDelete)
         fs.unlinkSync(filePath);
-    }
 
     for (const version of versions) {
         const code = generateCode(version.name);

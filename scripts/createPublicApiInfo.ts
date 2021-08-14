@@ -9,9 +9,8 @@ const versions = getCompilerVersions();
 const publicApiInfoDir = "./site/src/resources/publicApiInfo/";
 
 glob(`${publicApiInfoDir}/*.ts`, (err, filesToDelete) => {
-    for (const filePath of filesToDelete) {
+    for (const filePath of filesToDelete)
         fs.unlinkSync(filePath);
-    }
 
     for (const version of versions) {
         const code = getCode(version.name);
@@ -29,9 +28,8 @@ function getCode(versionName: string) {
     writer.indent(() => {
         for (const [syntaxKindName, properties] of analyzer.getNodePropertiesBySyntaxKind()) {
             writer.write(`["${syntaxKindName}", new Set([`);
-            for (const prop of properties) {
+            for (const prop of properties)
                 writer.quote(prop).write(",");
-            }
             writer.write("])],").newLine();
         }
     });
@@ -46,9 +44,8 @@ function getCode(versionName: string) {
 
     function writeForProperties(name: string, properties: Set<string>) {
         writer.writeLine(`export const ${name} = new Set([`);
-        for (const prop of properties) {
+        for (const prop of properties)
             writer.quote(prop).write(",");
-        }
         writer.writeLine("])");
     }
 }

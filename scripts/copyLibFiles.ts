@@ -10,17 +10,15 @@ const versions = getCompilerVersions();
 const minifier = createMinifier(ts);
 
 glob("./site/src/resources/libFiles/**/*.ts", (err, filesToDelete) => {
-    for (const filePath of filesToDelete) {
+    for (const filePath of filesToDelete)
         fs.unlinkSync(filePath);
-    }
 
     const libFilesDir = "./site/src/resources/libFiles/";
     for (const version of versions) {
         glob(`./node_modules/${version.name}/lib/lib*.d.ts`, (err, filePaths) => {
             const libVersionDir = libFilesDir + version.name + "/";
-            if (!fs.existsSync(libVersionDir)) {
+            if (!fs.existsSync(libVersionDir))
                 fs.mkdirSync(libVersionDir);
-            }
 
             for (const filePath of filePaths) {
                 const newFilePath = libVersionDir + path.basename(filePath, ".d.ts") + ".ts";

@@ -28,9 +28,8 @@ async function loadCompilerApi(packageName: CompilerPackageNames) {
     };
     const libFiles = await libFilesPromise;
 
-    for (const sourceFile of getLibSourceFiles()) {
+    for (const sourceFile of getLibSourceFiles())
         api.tsAstViewer.cachedSourceFiles[sourceFile.fileName] = sourceFile;
-    }
 
     compilerTypesLoaded[packageName] = true;
 
@@ -39,8 +38,6 @@ async function loadCompilerApi(packageName: CompilerPackageNames) {
     function getLibSourceFiles() {
         return Object.keys(libFiles)
             .map(key => libFiles[key] as { fileName: string; text: string })
-            .map(libFile =>
-                api.createSourceFile(libFile.fileName, libFile.text, api.ScriptTarget.Latest, false, api.ScriptKind.TS)
-            );
+            .map(libFile => api.createSourceFile(libFile.fileName, libFile.text, api.ScriptTarget.Latest, false, api.ScriptKind.TS));
     }
 }

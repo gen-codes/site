@@ -15,7 +15,7 @@ export interface CompilerState {
     selectedNode: Node;
     query?: string;
     results?: Node[];
-    generators?: Record<string,string>;
+    generators?: Record<string, string>;
     selectedGenerator?: string;
     generatedCode?: string;
     // this is deferred because binding may be disabled

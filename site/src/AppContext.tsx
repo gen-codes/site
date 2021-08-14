@@ -51,28 +51,24 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
             const compilerPackageName = state.options.compilerPackageName;
             const changeLoadingState = !hasLoadedCompilerApi(compilerPackageName);
             try {
-                if (changeLoadingState) {
+                if (changeLoadingState)
                     dispatch(actions.setApiLoadingState(ApiLoadingState.Loading));
-                } else {
+                else
                     await sleep(constants.general.sourceFileRefreshDelay); // debounce
-                }
 
-                if (abortSignal.aborted) {
+                if (abortSignal.aborted)
                     return;
-                }
 
                 const api = await getCompilerApi(compilerPackageName);
-                if (abortSignal.aborted) {
+                if (abortSignal.aborted)
                     return;
-                }
 
                 dispatch(actions.refreshSourceFile(api));
                 dispatch(actions.setApiLoadingState(ApiLoadingState.Loaded));
             } catch (err) {
                 console.error(err);
-                if (changeLoadingState) {
+                if (changeLoadingState)
                     dispatch(actions.setApiLoadingState(ApiLoadingState.Error));
-                }
             }
         }
     }, [
@@ -92,9 +88,8 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
     }, [state.options.treeMode, state.options.showFactoryCode, state.options.showInternals]);
 
     useEffect(() => {
-        if (state.compiler == null || state.compiler.selectedNode == null) {
+        if (state.compiler == null || state.compiler.selectedNode == null)
             return;
-        }
 
         const windowAny = window as any;
         const selectedNode = state.compiler.selectedNode;
@@ -109,13 +104,10 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
             windowAny.typeChecker = bindingTools.typeChecker;
             windowAny.program = bindingTools.program;
             windowAny.type = tryGet(() => bindingTools.typeChecker.getTypeAtLocation(selectedNode));
-            windowAny.symbol = tryGet(() =>
-                (selectedNode as any).symbol || bindingTools.typeChecker.getSymbolAtLocation(selectedNode)
-            );
-            windowAny.signature = tryGet(() =>
-                bindingTools.typeChecker.getSignatureFromDeclaration(selectedNode as any)
-            );
-        } else {
+            windowAny.symbol = tryGet(() => (selectedNode as any).symbol || bindingTools.typeChecker.getSymbolAtLocation(selectedNode));
+            windowAny.signature = tryGet(() => bindingTools.typeChecker.getSignatureFromDeclaration(selectedNode as any));
+        }
+        else {
             windowAny.checker = undefined;
             windowAny.typeChecker = undefined;
             windowAny.program = undefined;
@@ -142,8 +134,7 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
 
 export function useAppContext() {
     const context = React.useContext(AppContext);
-    if (context == null) {
+    if (context == null)
         throw new Error("Context was undefined.");
-    }
     return context;
 }

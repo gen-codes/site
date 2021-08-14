@@ -25,9 +25,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     componentDidCatch(error: any, errorInfo: any) {
         this.setState({ hasError: true, error, errorInfo });
         console.error(error);
-        if (this.props.getResetHash != null) {
+        if (this.props.getResetHash != null)
             this.lastResetHash = this.props.getResetHash();
-        }
     }
 
     render() {
@@ -46,9 +45,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     }
 
     private getHasError() {
-        if (!this.state.hasError) {
+        if (!this.state.hasError)
             return false;
-        }
 
         if (this.hasHashChanged()) {
             this.lastResetHash = undefined;
@@ -63,9 +61,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     }
 
     private hasHashChanged() {
-        if (this.props.getResetHash == null) {
+        if (this.props.getResetHash == null)
             return false;
-        }
 
         const currentResetHash = this.props.getResetHash();
         return currentResetHash !== this.lastResetHash;
