@@ -6,8 +6,8 @@ import "./external/react-treeview.css";
 import { App } from "./App";
 
 ReactDOM.render(
-    <AppContextProvider>
-        <App />
-    </AppContextProvider>,
-    document.getElementById("root") as HTMLElement,
+  <AppContextProvider>
+    <App />
+  </AppContextProvider>,
+  document.getElementById("root") as HTMLElement,
 );

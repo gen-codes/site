@@ -1,9 +1,6 @@
 import CodeBlockWriter from "code-block-writer";
 
-export function generateFactoryCode(
-    ts: typeof import("typescript-3.5.3"),
-    initialNode: import("typescript-3.5.3").Node,
-) {
+export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initialNode: import("typescript-3.5.3").Node) {
     const writer = new CodeBlockWriter({ newLine: "\n", indentNumberOfSpaces: 2 });
     const syntaxKindToName = createSyntaxKindToNameMap();
 
@@ -13,15 +10,15 @@ export function generateFactoryCode(
             writer.indent(() => {
                 for (let i = 0; i < initialNode.statements.length; i++) {
                     const statement = initialNode.statements[i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
                     writeNodeText(statement);
                 }
             }).newLine();
         }
         writer.write("];");
-    } else {
+    }
+    else {
         writeNodeText(initialNode);
     }
     writer.newLineIfLastNot();
@@ -500,45 +497,46 @@ export function generateFactoryCode(
                     writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");
                     return;
                 }
-                writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */");
+                writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")
         }
     }
 
     function writeNodeTextForTypeNode(node: import("typescript-3.5.3").TypeNode) {
         if (node.kind >= ts.SyntaxKind.FirstKeyword && node.kind <= ts.SyntaxKind.LastKeyword) {
             writer.write("ts.createKeywordTypeNode(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");
-        } else {
+        }
+        else {
             writeNodeText(node);
         }
     }
 
     function createNumericLiteral(node: import("typescript-3.5.3").NumericLiteral) {
         writer.write("ts.createNumericLiteral(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createBigIntLiteral(node: import("typescript-3.5.3").BigIntLiteral) {
         writer.write("ts.createBigIntLiteral(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createStringLiteral(node: import("typescript-3.5.3").StringLiteral) {
         writer.write("ts.createStringLiteral(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createRegularExpressionLiteral(node: import("typescript-3.5.3").RegularExpressionLiteral) {
         writer.write("ts.createRegularExpressionLiteral(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createIdentifier(node: import("typescript-3.5.3").Identifier) {
         writer.write("ts.createIdentifier(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
@@ -571,16 +569,16 @@ export function generateFactoryCode(
         writer.write("ts.createQualifiedName(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.left);
+            writeNodeText(node.left)
             writer.write(",").newLine();
-            writeNodeText(node.right);
+            writeNodeText(node.right)
         });
         writer.write(")");
     }
 
     function createComputedPropertyName(node: import("typescript-3.5.3").ComputedPropertyName) {
         writer.write("ts.createComputedPropertyName(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -588,18 +586,18 @@ export function generateFactoryCode(
         writer.write("ts.createTypeParameterDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.constraint == null) {
+            if (node.constraint == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.constraint);
+            else {
+                writeNodeTextForTypeNode(node.constraint)
             }
             writer.write(",").newLine();
-            if (node.default == null) {
+            if (node.default == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.default);
+            else {
+                writeNodeTextForTypeNode(node.default)
             }
         });
         writer.write(")");
@@ -609,41 +607,41 @@ export function generateFactoryCode(
         writer.write("ts.createParameter(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -651,30 +649,30 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.dotDotDotToken == null) {
+            if (node.dotDotDotToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.dotDotDotToken);
+            else {
+                writeNodeText(node.dotDotDotToken)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.questionToken == null) {
+            if (node.questionToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.questionToken);
+            else {
+                writeNodeText(node.questionToken)
             }
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -682,7 +680,7 @@ export function generateFactoryCode(
 
     function createDecorator(node: import("typescript-3.5.3").Decorator) {
         writer.write("ts.createDecorator(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -690,20 +688,20 @@ export function generateFactoryCode(
         writer.write("ts.createPropertySignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -711,24 +709,24 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.questionToken == null) {
+            if (node.questionToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.questionToken);
+            else {
+                writeNodeText(node.questionToken)
             }
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -738,41 +736,41 @@ export function generateFactoryCode(
         writer.write("ts.createProperty(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -780,26 +778,25 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.questionToken != null) {
+            if (node.questionToken != null)
                 writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");
-            } else if (node.exclamationToken != null) {
+            else if (node.exclamationToken != null)
                 writer.write("ts.createToken(ts.SyntaxKind.ExclamationToken)");
-            } else {
+            else
                 writer.write("undefined");
+            writer.write(",").newLine();
+            if (node.type == null)
+                writer.write("undefined");
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
-            }
-            writer.write(",").newLine();
-            if (node.initializer == null) {
-                writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -809,21 +806,21 @@ export function generateFactoryCode(
         writer.write("ts.createMethodSignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -833,32 +830,32 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.questionToken == null) {
+            if (node.questionToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.questionToken);
+            else {
+                writeNodeText(node.questionToken)
             }
         });
         writer.write(")");
@@ -868,41 +865,41 @@ export function generateFactoryCode(
         writer.write("ts.createMethod(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -910,35 +907,35 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.asteriskToken == null) {
+            if (node.asteriskToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.asteriskToken);
+            else {
+                writeNodeText(node.asteriskToken)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.questionToken == null) {
+            if (node.questionToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.questionToken);
+            else {
+                writeNodeText(node.questionToken)
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -948,30 +945,30 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
         });
         writer.write(")");
@@ -981,41 +978,41 @@ export function generateFactoryCode(
         writer.write("ts.createConstructor(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -1026,24 +1023,24 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
         });
         writer.write(")");
@@ -1053,41 +1050,41 @@ export function generateFactoryCode(
         writer.write("ts.createGetAccessor(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -1095,35 +1092,35 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
         });
         writer.write(")");
@@ -1133,41 +1130,41 @@ export function generateFactoryCode(
         writer.write("ts.createSetAccessor(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -1175,29 +1172,29 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
         });
         writer.write(")");
@@ -1207,21 +1204,21 @@ export function generateFactoryCode(
         writer.write("ts.createCallSignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -1231,24 +1228,24 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
         });
         writer.write(")");
@@ -1258,21 +1255,21 @@ export function generateFactoryCode(
         writer.write("ts.createConstructSignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -1282,24 +1279,24 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
         });
         writer.write(")");
@@ -1309,41 +1306,41 @@ export function generateFactoryCode(
         writer.write("ts.createIndexSignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -1354,24 +1351,24 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
         });
         writer.write(")");
@@ -1379,7 +1376,7 @@ export function generateFactoryCode(
 
     function createKeywordTypeNode(node: import("typescript-3.5.3").KeywordTypeNode) {
         writer.write("ts.createKeywordTypeNode(");
-        writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.kind]);
+        writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.kind])
         writer.write(")");
     }
 
@@ -1387,9 +1384,9 @@ export function generateFactoryCode(
         writer.write("ts.createTypePredicateNode(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.parameterName);
+            writeNodeText(node.parameterName)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
@@ -1398,23 +1395,23 @@ export function generateFactoryCode(
         writer.write("ts.createTypeReferenceNode(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.typeName);
+            writeNodeText(node.typeName)
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
@@ -1428,21 +1425,21 @@ export function generateFactoryCode(
         writer.write("ts.createFunctionTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -1452,21 +1449,21 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
@@ -1475,21 +1472,21 @@ export function generateFactoryCode(
         writer.write("ts.createConstructorTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -1499,28 +1496,28 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
 
     function createTypeQueryNode(node: import("typescript-3.5.3").TypeQueryNode) {
         writer.write("ts.createTypeQueryNode(");
-        writeNodeText(node.exprName);
+        writeNodeText(node.exprName)
         writer.write(")");
     }
 
@@ -1529,15 +1526,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.members.length === 1) {
             const item = node.members![0];
-            writeNodeText(item);
-        } else if (node.members.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.members.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.members!.length; i++) {
                     const item = node.members![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -1547,7 +1544,7 @@ export function generateFactoryCode(
 
     function createArrayTypeNode(node: import("typescript-3.5.3").ArrayTypeNode) {
         writer.write("ts.createArrayTypeNode(");
-        writeNodeTextForTypeNode(node.elementType);
+        writeNodeTextForTypeNode(node.elementType)
         writer.write(")");
     }
 
@@ -1556,15 +1553,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elementTypes.length === 1) {
             const item = node.elementTypes![0];
-            writeNodeTextForTypeNode(item);
-        } else if (node.elementTypes.length > 1) {
+            writeNodeTextForTypeNode(item)
+        }
+        else if (node.elementTypes.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elementTypes!.length; i++) {
                     const item = node.elementTypes![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeTextForTypeNode(item);
+                    writeNodeTextForTypeNode(item)
                 }
             });
         }
@@ -1574,13 +1571,13 @@ export function generateFactoryCode(
 
     function createOptionalTypeNode(node: import("typescript-3.5.3").OptionalTypeNode) {
         writer.write("ts.createOptionalTypeNode(");
-        writeNodeTextForTypeNode(node.type);
+        writeNodeTextForTypeNode(node.type)
         writer.write(")");
     }
 
     function createRestTypeNode(node: import("typescript-3.5.3").RestTypeNode) {
         writer.write("ts.createRestTypeNode(");
-        writeNodeTextForTypeNode(node.type);
+        writeNodeTextForTypeNode(node.type)
         writer.write(")");
     }
 
@@ -1589,15 +1586,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.types.length === 1) {
             const item = node.types![0];
-            writeNodeTextForTypeNode(item);
-        } else if (node.types.length > 1) {
+            writeNodeTextForTypeNode(item)
+        }
+        else if (node.types.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.types!.length; i++) {
                     const item = node.types![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeTextForTypeNode(item);
+                    writeNodeTextForTypeNode(item)
                 }
             });
         }
@@ -1610,15 +1607,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.types.length === 1) {
             const item = node.types![0];
-            writeNodeTextForTypeNode(item);
-        } else if (node.types.length > 1) {
+            writeNodeTextForTypeNode(item)
+        }
+        else if (node.types.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.types!.length; i++) {
                     const item = node.types![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeTextForTypeNode(item);
+                    writeNodeTextForTypeNode(item)
                 }
             });
         }
@@ -1630,20 +1627,20 @@ export function generateFactoryCode(
         writer.write("ts.createConditionalTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeTextForTypeNode(node.checkType);
+            writeNodeTextForTypeNode(node.checkType)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.extendsType);
+            writeNodeTextForTypeNode(node.extendsType)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.trueType);
+            writeNodeTextForTypeNode(node.trueType)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.falseType);
+            writeNodeTextForTypeNode(node.falseType)
         });
         writer.write(")");
     }
 
     function createInferTypeNode(node: import("typescript-3.5.3").InferTypeNode) {
         writer.write("ts.createInferTypeNode(");
-        writeNodeText(node.typeParameter);
+        writeNodeText(node.typeParameter)
         writer.write(")");
     }
 
@@ -1651,39 +1648,39 @@ export function generateFactoryCode(
         writer.write("ts.createImportTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeTextForTypeNode(node.argument);
+            writeNodeTextForTypeNode(node.argument)
             writer.write(",").newLine();
-            if (node.qualifier == null) {
+            if (node.qualifier == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.qualifier);
+            else {
+                writeNodeText(node.qualifier)
             }
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.isTypeOf == null) {
+            if (node.isTypeOf == null)
                 writer.write("undefined");
-            } else {
-                writer.write(node.isTypeOf.toString());
+            else {
+                writer.write(node.isTypeOf.toString())
             }
         });
         writer.write(")");
@@ -1691,7 +1688,7 @@ export function generateFactoryCode(
 
     function createParenthesizedType(node: import("typescript-3.5.3").ParenthesizedTypeNode) {
         writer.write("ts.createParenthesizedType(");
-        writeNodeTextForTypeNode(node.type);
+        writeNodeTextForTypeNode(node.type)
         writer.write(")");
     }
 
@@ -1702,7 +1699,7 @@ export function generateFactoryCode(
 
     function createTypeOperatorNode(node: import("typescript-3.5.3").TypeOperatorNode) {
         writer.write("ts.createTypeOperatorNode(");
-        writeNodeTextForTypeNode(node.type);
+        writeNodeTextForTypeNode(node.type)
         writer.write(")");
     }
 
@@ -1710,9 +1707,9 @@ export function generateFactoryCode(
         writer.write("ts.createIndexedAccessTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeTextForTypeNode(node.objectType);
+            writeNodeTextForTypeNode(node.objectType)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.indexType);
+            writeNodeTextForTypeNode(node.indexType)
         });
         writer.write(")");
     }
@@ -1721,24 +1718,24 @@ export function generateFactoryCode(
         writer.write("ts.createMappedTypeNode(");
         writer.newLine();
         writer.indent(() => {
-            if (node.readonlyToken == null) {
+            if (node.readonlyToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.readonlyToken);
+            else {
+                writeNodeText(node.readonlyToken)
             }
             writer.write(",").newLine();
-            writeNodeText(node.typeParameter);
+            writeNodeText(node.typeParameter)
             writer.write(",").newLine();
-            if (node.questionToken == null) {
+            if (node.questionToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.questionToken);
+            else {
+                writeNodeText(node.questionToken)
             }
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
         });
         writer.write(")");
@@ -1746,7 +1743,7 @@ export function generateFactoryCode(
 
     function createLiteralTypeNode(node: import("typescript-3.5.3").LiteralTypeNode) {
         writer.write("ts.createLiteralTypeNode(");
-        writeNodeText(node.literal);
+        writeNodeText(node.literal)
         writer.write(")");
     }
 
@@ -1755,15 +1752,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elements.length === 1) {
             const item = node.elements![0];
-            writeNodeText(item);
-        } else if (node.elements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elements!.length; i++) {
                     const item = node.elements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -1776,15 +1773,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elements.length === 1) {
             const item = node.elements![0];
-            writeNodeText(item);
-        } else if (node.elements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elements!.length; i++) {
                     const item = node.elements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -1796,24 +1793,24 @@ export function generateFactoryCode(
         writer.write("ts.createBindingElement(");
         writer.newLine();
         writer.indent(() => {
-            if (node.dotDotDotToken == null) {
+            if (node.dotDotDotToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.dotDotDotToken);
+            else {
+                writeNodeText(node.dotDotDotToken)
             }
             writer.write(",").newLine();
-            if (node.propertyName == null) {
+            if (node.propertyName == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.propertyName);
+            else {
+                writeNodeText(node.propertyName)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -1826,21 +1823,21 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.elements.length === 1) {
                 const item = node.elements![0];
-                writeNodeText(item);
-            } else if (node.elements.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.elements.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.elements!.length; i++) {
                         const item = node.elements![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write(((node as any).multiLine || false).toString());
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
@@ -1852,21 +1849,21 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.properties.length === 1) {
                 const item = node.properties![0];
-                writeNodeText(item);
-            } else if (node.properties.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.properties.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.properties!.length; i++) {
                         const item = node.properties![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write(((node as any).multiLine || false).toString());
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
@@ -1875,9 +1872,9 @@ export function generateFactoryCode(
         writer.write("ts.createPropertyAccess(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
         });
         writer.write(")");
     }
@@ -1886,9 +1883,9 @@ export function generateFactoryCode(
         writer.write("ts.createElementAccess(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.argumentExpression);
+            writeNodeText(node.argumentExpression)
         });
         writer.write(")");
     }
@@ -1897,23 +1894,23 @@ export function generateFactoryCode(
         writer.write("ts.createCall(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
@@ -1923,15 +1920,15 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.arguments.length === 1) {
                 const item = node.arguments![0];
-                writeNodeText(item);
-            } else if (node.arguments.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.arguments.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.arguments!.length; i++) {
                         const item = node.arguments![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -1944,44 +1941,44 @@ export function generateFactoryCode(
         writer.write("ts.createNew(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.arguments == null) {
+            if (node.arguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.arguments.length === 1) {
                     const item = node.arguments![0];
-                    writeNodeText(item);
-                } else if (node.arguments.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.arguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.arguments!.length; i++) {
                             const item = node.arguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -1995,9 +1992,9 @@ export function generateFactoryCode(
         writer.write("ts.createTaggedTemplate(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.tag);
+            writeNodeText(node.tag)
             writer.write(",").newLine();
-            writeNodeText(node.template);
+            writeNodeText(node.template)
         });
         writer.write(")");
     }
@@ -2006,16 +2003,16 @@ export function generateFactoryCode(
         writer.write("ts.createTypeAssertion(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
         });
         writer.write(")");
     }
 
     function createParen(node: import("typescript-3.5.3").ParenthesizedExpression) {
         writer.write("ts.createParen(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2023,20 +2020,20 @@ export function generateFactoryCode(
         writer.write("ts.createFunctionExpression(");
         writer.newLine();
         writer.indent(() => {
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2044,33 +2041,33 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.asteriskToken == null) {
+            if (node.asteriskToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.asteriskToken);
+            else {
+                writeNodeText(node.asteriskToken)
             }
             writer.write(",").newLine();
-            if (node.name == null) {
+            if (node.name == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.name);
+            else {
+                writeNodeText(node.name)
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -2080,27 +2077,27 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            writeNodeText(node.body);
+            writeNodeText(node.body)
         });
         writer.write(")");
     }
@@ -2109,20 +2106,20 @@ export function generateFactoryCode(
         writer.write("ts.createArrowFunction(");
         writer.newLine();
         writer.indent(() => {
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2130,21 +2127,21 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -2154,54 +2151,54 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            writeNodeText(node.equalsGreaterThanToken);
+            writeNodeText(node.equalsGreaterThanToken)
             writer.write(",").newLine();
-            writeNodeText(node.body);
+            writeNodeText(node.body)
         });
         writer.write(")");
     }
 
     function createDelete(node: import("typescript-3.5.3").DeleteExpression) {
         writer.write("ts.createDelete(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createTypeOf(node: import("typescript-3.5.3").TypeOfExpression) {
         writer.write("ts.createTypeOf(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createVoid(node: import("typescript-3.5.3").VoidExpression) {
         writer.write("ts.createVoid(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createAwait(node: import("typescript-3.5.3").AwaitExpression) {
         writer.write("ts.createAwait(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2209,9 +2206,9 @@ export function generateFactoryCode(
         writer.write("ts.createPrefix(");
         writer.newLine();
         writer.indent(() => {
-            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator]);
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator])
             writer.write(",").newLine();
-            writeNodeText(node.operand);
+            writeNodeText(node.operand)
         });
         writer.write(")");
     }
@@ -2220,9 +2217,9 @@ export function generateFactoryCode(
         writer.write("ts.createPostfix(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.operand);
+            writeNodeText(node.operand)
             writer.write(",").newLine();
-            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator]);
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator])
         });
         writer.write(")");
     }
@@ -2231,11 +2228,11 @@ export function generateFactoryCode(
         writer.write("ts.createBinary(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.left);
+            writeNodeText(node.left)
             writer.write(",").newLine();
-            writeNodeText(node.operatorToken);
+            writeNodeText(node.operatorToken)
             writer.write(",").newLine();
-            writeNodeText(node.right);
+            writeNodeText(node.right)
         });
         writer.write(")");
     }
@@ -2244,11 +2241,11 @@ export function generateFactoryCode(
         writer.write("ts.createConditional(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.condition);
+            writeNodeText(node.condition)
             writer.write(",").newLine();
-            writeNodeText(node.whenTrue);
+            writeNodeText(node.whenTrue)
             writer.write(",").newLine();
-            writeNodeText(node.whenFalse);
+            writeNodeText(node.whenFalse)
         });
         writer.write(")");
     }
@@ -2257,20 +2254,20 @@ export function generateFactoryCode(
         writer.write("ts.createTemplateExpression(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.head);
+            writeNodeText(node.head)
             writer.write(",").newLine();
             writer.write("[");
             if (node.templateSpans.length === 1) {
                 const item = node.templateSpans![0];
-                writeNodeText(item);
-            } else if (node.templateSpans.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.templateSpans.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.templateSpans!.length; i++) {
                         const item = node.templateSpans![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -2281,41 +2278,41 @@ export function generateFactoryCode(
 
     function createTemplateHead(node: import("typescript-3.5.3").TemplateHead) {
         writer.write("ts.createTemplateHead(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createTemplateMiddle(node: import("typescript-3.5.3").TemplateMiddle) {
         writer.write("ts.createTemplateMiddle(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createTemplateTail(node: import("typescript-3.5.3").TemplateTail) {
         writer.write("ts.createTemplateTail(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createNoSubstitutionTemplateLiteral(node: import("typescript-3.5.3").NoSubstitutionTemplateLiteral) {
         writer.write("ts.createNoSubstitutionTemplateLiteral(");
-        writer.quote(node.text.toString());
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createYield(node: import("typescript-3.5.3").YieldExpression) {
         writer.write("ts.createYield(");
-        if (node.expression == null) {
+        if (node.expression == null)
             writer.write("undefined");
-        } else {
-            writeNodeText(node.expression);
+        else {
+            writeNodeText(node.expression)
         }
         writer.write(")");
     }
 
     function createSpread(node: import("typescript-3.5.3").SpreadElement) {
         writer.write("ts.createSpread(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2323,20 +2320,20 @@ export function generateFactoryCode(
         writer.write("ts.createClassExpression(");
         writer.newLine();
         writer.indent(() => {
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2344,48 +2341,48 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.name == null) {
+            if (node.name == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.name);
+            else {
+                writeNodeText(node.name)
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.heritageClauses == null) {
+            if (node.heritageClauses == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.heritageClauses.length === 1) {
                     const item = node.heritageClauses![0];
-                    writeNodeText(item);
-                } else if (node.heritageClauses.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -2395,15 +2392,15 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.members.length === 1) {
                 const item = node.members![0];
-                writeNodeText(item);
-            } else if (node.members.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -2421,28 +2418,28 @@ export function generateFactoryCode(
         writer.write("ts.createExpressionWithTypeArguments(");
         writer.newLine();
         writer.indent(() => {
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
         });
         writer.write(")");
     }
@@ -2451,16 +2448,16 @@ export function generateFactoryCode(
         writer.write("ts.createAsExpression(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
 
     function createNonNullExpression(node: import("typescript-3.5.3").NonNullExpression) {
         writer.write("ts.createNonNullExpression(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2468,9 +2465,9 @@ export function generateFactoryCode(
         writer.write("ts.createMetaProperty(");
         writer.newLine();
         writer.indent(() => {
-            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.keywordToken]);
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.keywordToken])
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
         });
         writer.write(")");
     }
@@ -2479,9 +2476,9 @@ export function generateFactoryCode(
         writer.write("ts.createTemplateSpan(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.literal);
+            writeNodeText(node.literal)
         });
         writer.write(")");
     }
@@ -2498,21 +2495,21 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.statements.length === 1) {
                 const item = node.statements![0];
-                writeNodeText(item);
-            } else if (node.statements.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.statements.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.statements!.length; i++) {
                         const item = node.statements![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write(((node as any).multiLine || false).toString());
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
@@ -2521,20 +2518,20 @@ export function generateFactoryCode(
         writer.write("ts.createVariableStatement(");
         writer.newLine();
         writer.indent(() => {
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2542,7 +2539,7 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.declarationList);
+            writeNodeText(node.declarationList)
         });
         writer.write(")");
     }
@@ -2554,7 +2551,7 @@ export function generateFactoryCode(
 
     function createExpressionStatement(node: import("typescript-3.5.3").ExpressionStatement) {
         writer.write("ts.createExpressionStatement(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2562,14 +2559,14 @@ export function generateFactoryCode(
         writer.write("ts.createIf(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.thenStatement);
+            writeNodeText(node.thenStatement)
             writer.write(",").newLine();
-            if (node.elseStatement == null) {
+            if (node.elseStatement == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.elseStatement);
+            else {
+                writeNodeText(node.elseStatement)
             }
         });
         writer.write(")");
@@ -2579,9 +2576,9 @@ export function generateFactoryCode(
         writer.write("ts.createDo(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
         });
         writer.write(")");
     }
@@ -2590,9 +2587,9 @@ export function generateFactoryCode(
         writer.write("ts.createWhile(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
@@ -2601,25 +2598,25 @@ export function generateFactoryCode(
         writer.write("ts.createFor(");
         writer.newLine();
         writer.indent(() => {
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
             writer.write(",").newLine();
-            if (node.condition == null) {
+            if (node.condition == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.condition);
+            else {
+                writeNodeText(node.condition)
             }
             writer.write(",").newLine();
-            if (node.incrementor == null) {
+            if (node.incrementor == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.incrementor);
+            else {
+                writeNodeText(node.incrementor)
             }
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
@@ -2628,11 +2625,11 @@ export function generateFactoryCode(
         writer.write("ts.createForIn(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.initializer);
+            writeNodeText(node.initializer)
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
@@ -2641,47 +2638,47 @@ export function generateFactoryCode(
         writer.write("ts.createForOf(");
         writer.newLine();
         writer.indent(() => {
-            if (node.awaitModifier == null) {
+            if (node.awaitModifier == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.awaitModifier);
+            else {
+                writeNodeText(node.awaitModifier)
             }
             writer.write(",").newLine();
-            writeNodeText(node.initializer);
+            writeNodeText(node.initializer)
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
 
     function createContinue(node: import("typescript-3.5.3").ContinueStatement) {
         writer.write("ts.createContinue(");
-        if (node.label == null) {
+        if (node.label == null)
             writer.write("undefined");
-        } else {
-            writeNodeText(node.label);
+        else {
+            writeNodeText(node.label)
         }
         writer.write(")");
     }
 
     function createBreak(node: import("typescript-3.5.3").BreakStatement) {
         writer.write("ts.createBreak(");
-        if (node.label == null) {
+        if (node.label == null)
             writer.write("undefined");
-        } else {
-            writeNodeText(node.label);
+        else {
+            writeNodeText(node.label)
         }
         writer.write(")");
     }
 
     function createReturn(node: import("typescript-3.5.3").ReturnStatement) {
         writer.write("ts.createReturn(");
-        if (node.expression == null) {
+        if (node.expression == null)
             writer.write("undefined");
-        } else {
-            writeNodeText(node.expression);
+        else {
+            writeNodeText(node.expression)
         }
         writer.write(")");
     }
@@ -2690,9 +2687,9 @@ export function generateFactoryCode(
         writer.write("ts.createWith(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
@@ -2701,9 +2698,9 @@ export function generateFactoryCode(
         writer.write("ts.createSwitch(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
-            writeNodeText(node.caseBlock);
+            writeNodeText(node.caseBlock)
         });
         writer.write(")");
     }
@@ -2712,19 +2709,19 @@ export function generateFactoryCode(
         writer.write("ts.createLabel(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.label);
+            writeNodeText(node.label)
             writer.write(",").newLine();
-            writeNodeText(node.statement);
+            writeNodeText(node.statement)
         });
         writer.write(")");
     }
 
     function createThrow(node: import("typescript-3.5.3").ThrowStatement) {
         writer.write("ts.createThrow(");
-        if (node.expression == null) {
+        if (node.expression == null)
             writer.write("undefined");
-        } else {
-            writeNodeText(node.expression);
+        else {
+            writeNodeText(node.expression)
         }
         writer.write(")");
     }
@@ -2733,18 +2730,18 @@ export function generateFactoryCode(
         writer.write("ts.createTry(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.tryBlock);
+            writeNodeText(node.tryBlock)
             writer.write(",").newLine();
-            if (node.catchClause == null) {
+            if (node.catchClause == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.catchClause);
+            else {
+                writeNodeText(node.catchClause)
             }
             writer.write(",").newLine();
-            if (node.finallyBlock == null) {
+            if (node.finallyBlock == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.finallyBlock);
+            else {
+                writeNodeText(node.finallyBlock)
             }
         });
         writer.write(")");
@@ -2759,18 +2756,18 @@ export function generateFactoryCode(
         writer.write("ts.createVariableDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -2783,15 +2780,15 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.declarations.length === 1) {
                 const item = node.declarations![0];
-                writeNodeText(item);
-            } else if (node.declarations.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.declarations.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.declarations!.length; i++) {
                         const item = node.declarations![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -2806,41 +2803,41 @@ export function generateFactoryCode(
         writer.write("ts.createFunctionDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2848,33 +2845,33 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.asteriskToken == null) {
+            if (node.asteriskToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.asteriskToken);
+            else {
+                writeNodeText(node.asteriskToken)
             }
             writer.write(",").newLine();
-            if (node.name == null) {
+            if (node.name == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.name);
+            else {
+                writeNodeText(node.name)
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -2884,30 +2881,30 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.parameters.length === 1) {
                 const item = node.parameters![0];
-                writeNodeText(item);
-            } else if (node.parameters.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            if (node.type == null) {
+            if (node.type == null)
                 writer.write("undefined");
-            } else {
-                writeNodeTextForTypeNode(node.type);
+            else {
+                writeNodeTextForTypeNode(node.type)
             }
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
         });
         writer.write(")");
@@ -2917,41 +2914,41 @@ export function generateFactoryCode(
         writer.write("ts.createClassDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -2959,48 +2956,48 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.name == null) {
+            if (node.name == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.name);
+            else {
+                writeNodeText(node.name)
             }
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.heritageClauses == null) {
+            if (node.heritageClauses == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.heritageClauses.length === 1) {
                     const item = node.heritageClauses![0];
-                    writeNodeText(item);
-                } else if (node.heritageClauses.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -3010,15 +3007,15 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.members.length === 1) {
                 const item = node.members![0];
-                writeNodeText(item);
-            } else if (node.members.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -3031,41 +3028,41 @@ export function generateFactoryCode(
         writer.write("ts.createInterfaceDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3073,44 +3070,44 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.heritageClauses == null) {
+            if (node.heritageClauses == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.heritageClauses.length === 1) {
                     const item = node.heritageClauses![0];
-                    writeNodeText(item);
-                } else if (node.heritageClauses.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
@@ -3120,15 +3117,15 @@ export function generateFactoryCode(
             writer.write("[");
             if (node.members.length === 1) {
                 const item = node.members![0];
-                writeNodeText(item);
-            } else if (node.members.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -3141,41 +3138,41 @@ export function generateFactoryCode(
         writer.write("ts.createTypeAliasDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3183,30 +3180,30 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.typeParameters == null) {
+            if (node.typeParameters == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeParameters.length === 1) {
                     const item = node.typeParameters![0];
-                    writeNodeText(item);
-                } else if (node.typeParameters.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeTextForTypeNode(node.type);
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
@@ -3215,41 +3212,41 @@ export function generateFactoryCode(
         writer.write("ts.createEnumDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3257,20 +3254,20 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
             if (node.members.length === 1) {
                 const item = node.members![0];
-                writeNodeText(item);
-            } else if (node.members.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -3283,41 +3280,41 @@ export function generateFactoryCode(
         writer.write("ts.createModuleDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3325,12 +3322,12 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.body == null) {
+            if (node.body == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.body);
+            else {
+                writeNodeText(node.body)
             }
             writer.write(",").newLine();
             writer.write(getNodeFlagValues(node.flags || 0));
@@ -3343,15 +3340,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.statements.length === 1) {
             const item = node.statements![0];
-            writeNodeText(item);
-        } else if (node.statements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.statements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.statements!.length; i++) {
                     const item = node.statements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3364,15 +3361,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.clauses.length === 1) {
             const item = node.clauses![0];
-            writeNodeText(item);
-        } else if (node.clauses.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.clauses.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.clauses!.length; i++) {
                     const item = node.clauses![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3382,7 +3379,7 @@ export function generateFactoryCode(
 
     function createNamespaceExportDeclaration(node: import("typescript-3.5.3").NamespaceExportDeclaration) {
         writer.write("ts.createNamespaceExportDeclaration(");
-        writeNodeText(node.name);
+        writeNodeText(node.name)
         writer.write(")");
     }
 
@@ -3390,41 +3387,41 @@ export function generateFactoryCode(
         writer.write("ts.createImportEqualsDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3432,9 +3429,9 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            writeNodeText(node.moduleReference);
+            writeNodeText(node.moduleReference)
         });
         writer.write(")");
     }
@@ -3443,41 +3440,41 @@ export function generateFactoryCode(
         writer.write("ts.createImportDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3485,13 +3482,13 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.importClause == null) {
+            if (node.importClause == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.importClause);
+            else {
+                writeNodeText(node.importClause)
             }
             writer.write(",").newLine();
-            writeNodeText(node.moduleSpecifier);
+            writeNodeText(node.moduleSpecifier)
         });
         writer.write(")");
     }
@@ -3500,16 +3497,16 @@ export function generateFactoryCode(
         writer.write("ts.createImportClause(");
         writer.newLine();
         writer.indent(() => {
-            if (node.name == null) {
+            if (node.name == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.name);
+            else {
+                writeNodeText(node.name)
             }
             writer.write(",").newLine();
-            if (node.namedBindings == null) {
+            if (node.namedBindings == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.namedBindings);
+            else {
+                writeNodeText(node.namedBindings)
             }
         });
         writer.write(")");
@@ -3517,7 +3514,7 @@ export function generateFactoryCode(
 
     function createNamespaceImport(node: import("typescript-3.5.3").NamespaceImport) {
         writer.write("ts.createNamespaceImport(");
-        writeNodeText(node.name);
+        writeNodeText(node.name)
         writer.write(")");
     }
 
@@ -3526,15 +3523,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elements.length === 1) {
             const item = node.elements![0];
-            writeNodeText(item);
-        } else if (node.elements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elements!.length; i++) {
                     const item = node.elements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3546,13 +3543,13 @@ export function generateFactoryCode(
         writer.write("ts.createImportSpecifier(");
         writer.newLine();
         writer.indent(() => {
-            if (node.propertyName == null) {
+            if (node.propertyName == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.propertyName);
+            else {
+                writeNodeText(node.propertyName)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
         });
         writer.write(")");
     }
@@ -3561,41 +3558,41 @@ export function generateFactoryCode(
         writer.write("ts.createExportAssignment(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3603,13 +3600,13 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.isExportEquals == null) {
+            if (node.isExportEquals == null)
                 writer.write("undefined");
-            } else {
-                writer.write(node.isExportEquals.toString());
+            else {
+                writer.write(node.isExportEquals.toString())
             }
             writer.write(",").newLine();
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
         });
         writer.write(")");
     }
@@ -3618,41 +3615,41 @@ export function generateFactoryCode(
         writer.write("ts.createExportDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null) {
+            if (node.decorators == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.decorators.length === 1) {
                     const item = node.decorators![0];
-                    writeNodeText(item);
-                } else if (node.decorators.length > 1) {
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeText(item);
+                            writeNodeText(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.modifiers == null) {
+            if (node.modifiers == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
                     writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                } else if (node.modifiers.length > 1) {
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
                             writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
@@ -3660,16 +3657,16 @@ export function generateFactoryCode(
                 writer.write("]");
             }
             writer.write(",").newLine();
-            if (node.exportClause == null) {
+            if (node.exportClause == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.exportClause);
+            else {
+                writeNodeText(node.exportClause)
             }
             writer.write(",").newLine();
-            if (node.moduleSpecifier == null) {
+            if (node.moduleSpecifier == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.moduleSpecifier);
+            else {
+                writeNodeText(node.moduleSpecifier)
             }
         });
         writer.write(")");
@@ -3680,15 +3677,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elements.length === 1) {
             const item = node.elements![0];
-            writeNodeText(item);
-        } else if (node.elements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elements!.length; i++) {
                     const item = node.elements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3700,20 +3697,20 @@ export function generateFactoryCode(
         writer.write("ts.createExportSpecifier(");
         writer.newLine();
         writer.indent(() => {
-            if (node.propertyName == null) {
+            if (node.propertyName == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.propertyName);
+            else {
+                writeNodeText(node.propertyName)
             }
             writer.write(",").newLine();
-            writeNodeText(node.name);
+            writeNodeText(node.name)
         });
         writer.write(")");
     }
 
     function createExternalModuleReference(node: import("typescript-3.5.3").ExternalModuleReference) {
         writer.write("ts.createExternalModuleReference(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -3721,26 +3718,26 @@ export function generateFactoryCode(
         writer.write("ts.createJsxElement(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.openingElement);
+            writeNodeText(node.openingElement)
             writer.write(",").newLine();
             writer.write("[");
             if (node.children.length === 1) {
                 const item = node.children![0];
-                writeNodeText(item);
-            } else if (node.children.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.children.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.children!.length; i++) {
                         const item = node.children![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writeNodeText(node.closingElement);
+            writeNodeText(node.closingElement)
         });
         writer.write(")");
     }
@@ -3749,30 +3746,30 @@ export function generateFactoryCode(
         writer.write("ts.createJsxSelfClosingElement(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.tagName);
+            writeNodeText(node.tagName)
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.attributes);
+            writeNodeText(node.attributes)
         });
         writer.write(")");
     }
@@ -3781,37 +3778,37 @@ export function generateFactoryCode(
         writer.write("ts.createJsxOpeningElement(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.tagName);
+            writeNodeText(node.tagName)
             writer.write(",").newLine();
-            if (node.typeArguments == null) {
+            if (node.typeArguments == null)
                 writer.write("undefined");
-            } else {
+            else {
                 writer.write("[");
                 if (node.typeArguments.length === 1) {
                     const item = node.typeArguments![0];
-                    writeNodeTextForTypeNode(item);
-                } else if (node.typeArguments.length > 1) {
+                    writeNodeTextForTypeNode(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indent(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
-                            if (i > 0) {
+                            if (i > 0)
                                 writer.write(",").newLine();
-                            }
-                            writeNodeTextForTypeNode(item);
+                            writeNodeTextForTypeNode(item)
                         }
                     });
                 }
                 writer.write("]");
             }
             writer.write(",").newLine();
-            writeNodeText(node.attributes);
+            writeNodeText(node.attributes)
         });
         writer.write(")");
     }
 
     function createJsxClosingElement(node: import("typescript-3.5.3").JsxClosingElement) {
         writer.write("ts.createJsxClosingElement(");
-        writeNodeText(node.tagName);
+        writeNodeText(node.tagName)
         writer.write(")");
     }
 
@@ -3819,26 +3816,26 @@ export function generateFactoryCode(
         writer.write("ts.createJsxFragment(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.openingFragment);
+            writeNodeText(node.openingFragment)
             writer.write(",").newLine();
             writer.write("[");
             if (node.children.length === 1) {
                 const item = node.children![0];
-                writeNodeText(item);
-            } else if (node.children.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.children.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.children!.length; i++) {
                         const item = node.children![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writeNodeText(node.closingFragment);
+            writeNodeText(node.closingFragment)
         });
         writer.write(")");
     }
@@ -3847,9 +3844,9 @@ export function generateFactoryCode(
         writer.write("ts.createJsxText(");
         writer.newLine();
         writer.indent(() => {
-            writer.quote(node.text.toString());
+            writer.quote(node.text.toString())
             writer.write(",").newLine();
-            writer.write(node.containsOnlyTriviaWhiteSpaces.toString());
+            writer.write(node.containsOnlyTriviaWhiteSpaces.toString())
         });
         writer.write(")");
     }
@@ -3868,12 +3865,12 @@ export function generateFactoryCode(
         writer.write("ts.createJsxAttribute(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -3884,15 +3881,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.properties.length === 1) {
             const item = node.properties![0];
-            writeNodeText(item);
-        } else if (node.properties.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.properties.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.properties!.length; i++) {
                     const item = node.properties![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3902,7 +3899,7 @@ export function generateFactoryCode(
 
     function createJsxSpreadAttribute(node: import("typescript-3.5.3").JsxSpreadAttribute) {
         writer.write("ts.createJsxSpreadAttribute(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -3910,16 +3907,16 @@ export function generateFactoryCode(
         writer.write("ts.createJsxExpression(");
         writer.newLine();
         writer.indent(() => {
-            if (node.dotDotDotToken == null) {
+            if (node.dotDotDotToken == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.dotDotDotToken);
+            else {
+                writeNodeText(node.dotDotDotToken)
             }
             writer.write(",").newLine();
-            if (node.expression == null) {
+            if (node.expression == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.expression);
+            else {
+                writeNodeText(node.expression)
             }
         });
         writer.write(")");
@@ -3929,20 +3926,20 @@ export function generateFactoryCode(
         writer.write("ts.createCaseClause(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.expression);
+            writeNodeText(node.expression)
             writer.write(",").newLine();
             writer.write("[");
             if (node.statements.length === 1) {
                 const item = node.statements![0];
-                writeNodeText(item);
-            } else if (node.statements.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.statements.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.statements!.length; i++) {
                         const item = node.statements![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -3956,15 +3953,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.statements.length === 1) {
             const item = node.statements![0];
-            writeNodeText(item);
-        } else if (node.statements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.statements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.statements!.length; i++) {
                     const item = node.statements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -3976,20 +3973,20 @@ export function generateFactoryCode(
         writer.write("ts.createHeritageClause(");
         writer.newLine();
         writer.indent(() => {
-            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.token]);
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.token])
             writer.write(",").newLine();
             writer.write("[");
             if (node.types.length === 1) {
                 const item = node.types![0];
-                writeNodeText(item);
-            } else if (node.types.length > 1) {
+                writeNodeText(item)
+            }
+            else if (node.types.length > 1) {
                 writer.indent(() => {
                     for (let i = 0; i < node.types!.length; i++) {
                         const item = node.types![i];
-                        if (i > 0) {
+                        if (i > 0)
                             writer.write(",").newLine();
-                        }
-                        writeNodeText(item);
+                        writeNodeText(item)
                     }
                 });
             }
@@ -4002,13 +3999,13 @@ export function generateFactoryCode(
         writer.write("ts.createCatchClause(");
         writer.newLine();
         writer.indent(() => {
-            if (node.variableDeclaration == null) {
+            if (node.variableDeclaration == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.variableDeclaration);
+            else {
+                writeNodeText(node.variableDeclaration)
             }
             writer.write(",").newLine();
-            writeNodeText(node.block);
+            writeNodeText(node.block)
         });
         writer.write(")");
     }
@@ -4017,9 +4014,9 @@ export function generateFactoryCode(
         writer.write("ts.createPropertyAssignment(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            writeNodeText(node.initializer);
+            writeNodeText(node.initializer)
         });
         writer.write(")");
     }
@@ -4028,12 +4025,12 @@ export function generateFactoryCode(
         writer.write("ts.createShorthandPropertyAssignment(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.objectAssignmentInitializer == null) {
+            if (node.objectAssignmentInitializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.objectAssignmentInitializer);
+            else {
+                writeNodeText(node.objectAssignmentInitializer)
             }
         });
         writer.write(")");
@@ -4041,7 +4038,7 @@ export function generateFactoryCode(
 
     function createSpreadAssignment(node: import("typescript-3.5.3").SpreadAssignment) {
         writer.write("ts.createSpreadAssignment(");
-        writeNodeText(node.expression);
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -4049,12 +4046,12 @@ export function generateFactoryCode(
         writer.write("ts.createEnumMember(");
         writer.newLine();
         writer.indent(() => {
-            writeNodeText(node.name);
+            writeNodeText(node.name)
             writer.write(",").newLine();
-            if (node.initializer == null) {
+            if (node.initializer == null)
                 writer.write("undefined");
-            } else {
-                writeNodeText(node.initializer);
+            else {
+                writeNodeText(node.initializer)
             }
         });
         writer.write(")");
@@ -4065,15 +4062,15 @@ export function generateFactoryCode(
         writer.write("[");
         if (node.elements.length === 1) {
             const item = node.elements![0];
-            writeNodeText(item);
-        } else if (node.elements.length > 1) {
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
             writer.indent(() => {
                 for (let i = 0; i < node.elements!.length; i++) {
                     const item = node.elements![i];
-                    if (i > 0) {
+                    if (i > 0)
                         writer.write(",").newLine();
-                    }
-                    writeNodeText(item);
+                    writeNodeText(item)
                 }
             });
         }
@@ -4085,51 +4082,34 @@ export function generateFactoryCode(
         const map: { [kind: number]: string } = {};
         for (const name of Object.keys(ts.SyntaxKind).filter(k => isNaN(parseInt(k, 10)))) {
             const value = (ts.SyntaxKind as any)[name] as number;
-            if (map[value] == null) {
+            if (map[value] == null)
                 map[value] = name;
-            }
         }
         return map;
     }
 
     function getNodeFlagValues(value: number) {
         // ignore the BlockScoped node flag
-        return getFlagValuesAsString(
-            ts.NodeFlags,
-            "ts.NodeFlags",
-            value || 0,
-            "None",
-            getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped),
-        );
+        return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));
     }
 
-    function getFlagValuesAsString(
-        enumObj: any,
-        enumName: string,
-        value: number,
-        defaultName: string,
-        flagValues?: number[],
-    ) {
+    function getFlagValuesAsString(enumObj: any, enumName: string, value: number, defaultName: string, flagValues?: number[]) {
         flagValues = flagValues || getFlagValues(enumObj, value);
         const members: string[] = [];
-        for (const flagValue of flagValues) {
+        for (const flagValue of flagValues)
             members.push(enumName + "." + enumObj[flagValue]);
-        }
-        if (members.length === 0) {
+        if (members.length === 0)
             members.push(enumName + "." + defaultName);
-        }
         return members.join(" | ");
     }
 
     function getFlagValues(enumObj: any, value: number) {
         const members: number[] = [];
         for (const prop in enumObj) {
-            if (typeof enumObj[prop] === "string") {
+            if (typeof enumObj[prop] === "string")
                 continue;
-            }
-            if ((enumObj[prop] & value) !== 0) {
+            if ((enumObj[prop] & value) !== 0)
                 members.push(enumObj[prop]);
-            }
         }
         return members;
     }

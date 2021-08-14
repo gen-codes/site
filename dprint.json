@@ -8,7 +8,8 @@
     "preferHanging": true,
     "nextControlFlowPosition": "nextLine",
     "arrowFunction.useParentheses": "preferNone",
-    "tryStatement.nextControlFlowPosition": "sameLine"
+    "tryStatement.nextControlFlowPosition": "sameLine",
+    "indentWidth": 2
   },
   "json": {
   },
