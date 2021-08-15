@@ -16,6 +16,7 @@ export interface CodeEditorProps {
   readOnly?: boolean;
   renderWhiteSpace?: boolean;
   editorDidMount?: EditorDidMount;
+  types?: string;
 }
 
 export interface CodeEditorState {
@@ -46,7 +47,9 @@ export class CodeEditor extends React.Component<CodeEditorProps, CodeEditorState
         target: monacoEditor.languages.typescript.ScriptTarget.ESNext,
         allowNonTsExtensions: true,
       });
-
+      if(props.types){
+        monacoEditor.languages.typescript.typescriptDefaults.addExtraLib(props.types, "")
+      }
       reactMonacoEditorPromise.then(editor => {
         this.setState({ editorComponent: editor.default });
       }).catch(err => {

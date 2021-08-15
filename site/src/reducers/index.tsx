@@ -7,6 +7,8 @@ import { CompilerApi, convertOptions, createSourceFile } from "../compiler";
 import { actions as actionNames } from "./../constants";
 import { OptionsState, StoreState } from "../types";
 import { UrlSaver } from "../utils";
+import prettier from "prettier/standalone";
+import tsparser from "prettier/parser-typescript";
 const urlSaver = new UrlSaver();
 function queryAst(ast: ts.SourceFile, query: string) {
   try {
@@ -98,6 +100,10 @@ export function appReducer(state: StoreState, action: AllActions): StoreState {
           data: state.compiler.results,
         });
         generatedCode = generatorFunc();
+        generatedCode = prettier.format(generatedCode,{
+          parser: "typescript",
+          plugins: [tsparser]
+        })
       } catch (err) {
         console.log(err);
       }

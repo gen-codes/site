@@ -11,6 +11,7 @@ import * as components from "./components";
 import { CodeEditor, ResultViewer } from "./components";
 import logo from "./logo.png";
 import { ApiLoadingState } from "./types";
+import type * as monacoEditorForTypes from "monaco-editor";
 
 const defaultCode = `const context = {} as any;
 const {q,toParam} = context;
@@ -86,6 +87,9 @@ const GeneratorEditor = function GeneratorEditorFunc({ code: generatorCodeInitia
         onSave={handleSave}
         showInfo={true}
         renderWhiteSpace={true}
+        types={
+          `declare const Fart = string`
+        }
       />
     </>
   );
@@ -266,6 +270,7 @@ export function App() {
             {state.compiler?.generatedCode && (
               <CodeEditor
                 text={state.compiler.generatedCode}
+
                 showInfo={true}
                 renderWhiteSpace={true}
                 readOnly
